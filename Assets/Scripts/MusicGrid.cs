@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using UnityEngine;
 
-[RequireComponent(typeof(Grid))][RequireComponent(typeof(AudioSource))]
+[RequireComponent(typeof(AudioSource))]
 public class MusicGrid : MonoBehaviour
 {
     [SerializeField] private GameObject block;
@@ -58,14 +58,15 @@ public class MusicGrid : MonoBehaviour
 
     private void OnTick()
     {
-        block.gameObject.SetActive(true);
 
         for (int i = instruments.Length - 1; i >= 0; i--)
         {
             bool[] note = instruments[i].testNotes;
             if (note[_beat])
+            {
+                block.gameObject.SetActive(true);
                 _source.PlayOneShot(instruments[i].sound);
-            Debug.Log("Beat: "+ _beat +"\nInstrument: "+note[_beat]);
+            }
         }
 
         _beat++;
