@@ -7,32 +7,37 @@ public class DragAndDrop : MonoBehaviour
 {
     [SerializeField] private AudioClip clip;
     
-    private bool canMove = false;
-    private bool dragging = false;
     private Collider2D collider;
     private Vector3 basePos;
+    private Color baseColor;
+    private bool dragging = false;
+    private bool usable = true;
     
     void Start ()
     {
         collider = GetComponent<Collider2D>();
         basePos = transform.position;
+        baseColor = GetComponent<SpriteRenderer>().color;
     }
 
+    private void OnEnable()
+    {
+        ButtonManager.OnPlay += CannotPlay;
+        ButtonManager.OnStop += CanPlay;
+    }
+
+    private void OnDisable()
+    {
+        ButtonManager.OnPlay -= CannotPlay;
+        ButtonManager.OnStop -= CanPlay;
+    }
+    
     void Update()
     {
         Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         if (Input.GetMouseButtonDown(0))
         {
-            if (collider == Physics2D.OverlapPoint(mousePos))
-            {
-                canMove = true;
-            }
-            else
-            {
-                canMove = false;
-            }
-
-            if (canMove)
+            if (collider == Physics2D.OverlapPoint(mousePos) && usable)
             {
                 dragging = true;
             }
@@ -40,6 +45,7 @@ public class DragAndDrop : MonoBehaviour
 
         if (dragging)
             this.transform.position = mousePos;
+        
         if (Input.GetMouseButtonUp(0))
         {
             if (dragging)
@@ -53,8 +59,6 @@ public class DragAndDrop : MonoBehaviour
                     }
                 }
             }
-
-            canMove = false;
             dragging = false;
             transform.position = basePos;
         }
@@ -64,5 +68,17 @@ public class DragAndDrop : MonoBehaviour
     {
         reciever.GetComponent<SpriteRenderer>().color = this.GetComponent<SpriteRenderer>().color;
         reciever.GetComponent<Monster>().SetClip(clip);
+        reciever.GetComponent<Monster>().GetInstrument().sprite = this.GetComponent<SpriteRenderer>().sprite;
+    }
+
+    private void CanPlay()
+    {
+        usable = true;
+        GetComponent<SpriteRenderer>().color = baseColor;
+    }
+    private void CannotPlay()
+    {
+        usable = false;
+        GetComponent<SpriteRenderer>().color = Color.gray;
     }
 }

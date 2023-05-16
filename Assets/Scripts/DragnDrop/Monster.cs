@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,11 +8,26 @@ public class Monster : MonoBehaviour
 {
     private Collider2D collider;
     private AudioSource source;
-    private AudioClip clip = null;
+    [SerializeField]private SpriteRenderer instrument;
     private void Start()
     {
+        //instrument = this.gameObject.GetComponentInChildren<SpriteRenderer>();
+        Debug.Log(instrument);
         collider = GetComponent<Collider2D>();
         source = GetComponent<AudioSource>();
+        source.loop = true;
+    }
+
+    private void OnEnable()
+    {
+        ButtonManager.OnPlay += StartTrack;
+        ButtonManager.OnStop += StopTrack;
+    }
+
+    private void OnDisable()
+    {
+        ButtonManager.OnPlay -= StartTrack;
+        ButtonManager.OnStop -= StopTrack;
     }
 
     private void Update()
@@ -21,21 +37,14 @@ public class Monster : MonoBehaviour
         {
             Reset();
         }
-
-        List<Monster> monsters = SoundManager.instance.GetActiveMonsters();
-        if (monsters.Count > 0 && !monsters[0].source.isPlaying && clip != null)
-        {
-            source.Stop();
-            source.PlayOneShot(clip);
-        }
     }
 
     private void Reset()
     {
-        SoundManager.instance.GetActiveMonsters().Remove(this);
         this.GetComponent<SpriteRenderer>().color = Color.white;
+        instrument.sprite = null;
         source.Stop();
-        clip = null;
+        source.clip = null;
     }
     
     public void SetClip(AudioClip pClip)
@@ -43,7 +52,22 @@ public class Monster : MonoBehaviour
         List<Monster> monsters = SoundManager.instance.GetActiveMonsters();
         if (!monsters.Contains(this))
             monsters.Add(this);
+        source.clip = pClip;
+    }
+
+    public SpriteRenderer GetInstrument()
+    {
+        return instrument;
+    }
+
+    private void StartTrack()
+    {
+        if (source.clip != null)
+            source.Play();
+    }
+
+    private void StopTrack()
+    {
         source.Stop();
-        clip = pClip;
     }
 }
