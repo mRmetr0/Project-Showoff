@@ -5,8 +5,16 @@ using UnityEngine;
 [RequireComponent(typeof(Collider2D))]
 public class DragAndDrop : MonoBehaviour
 {
-    [SerializeField] private AudioClip clip;
-    
+    public Type type;
+    public enum Type
+    {
+        Drums,
+        Trumpet, 
+        Guitar,
+        Keytar,
+        KeytarGrid,
+        Null
+    }
     private Collider2D collider;
     private Vector3 basePos;
     private Color baseColor;
@@ -67,7 +75,8 @@ public class DragAndDrop : MonoBehaviour
     private void HandleReciever(GameObject reciever)
     {
         reciever.GetComponent<SpriteRenderer>().color = this.GetComponent<SpriteRenderer>().color;
-        reciever.GetComponent<Monster>().SetClip(clip);
+        //reciever.GetComponent<Monster>().SetClip(clip);
+        reciever.GetComponent<Monster>().SetInstrument(type);
         reciever.GetComponent<Monster>().GetInstrument().sprite = this.GetComponent<SpriteRenderer>().sprite;
     }
 

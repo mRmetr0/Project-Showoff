@@ -6,13 +6,19 @@ using UnityEngine;
 [RequireComponent(typeof(AudioSource))]
 public class Monster : MonoBehaviour
 {
+    [SerializeField] private SpriteRenderer instrument;
+    [Space(5)][Header ("Instrument Audioclips:")]
+    [SerializeField] private AudioClip drums;
+    [SerializeField] private AudioClip trumpet;
+    [SerializeField] private AudioClip guitar;
+    [SerializeField] private AudioClip keytar;
+    
     private Collider2D collider;
     private AudioSource source;
-    [SerializeField]private SpriteRenderer instrument;
+    
     private void Start()
     {
         //instrument = this.gameObject.GetComponentInChildren<SpriteRenderer>();
-        Debug.Log(instrument);
         collider = GetComponent<Collider2D>();
         source = GetComponent<AudioSource>();
         source.loop = true;
@@ -47,11 +53,30 @@ public class Monster : MonoBehaviour
         source.clip = null;
     }
     
+    public void SetInstrument(DragAndDrop.Type inst)
+    {
+        switch (inst)
+        {
+            case(DragAndDrop.Type.Drums):
+                source.clip = drums;
+                break;
+            
+            case(DragAndDrop.Type.Trumpet):
+                source.clip = trumpet;
+                break;
+            
+            case(DragAndDrop.Type.Guitar):
+                source.clip = guitar;
+                break;
+            
+            case(DragAndDrop.Type.Keytar):
+                source.clip = keytar;
+                break;
+        }
+    }
+    
     public void SetClip(AudioClip pClip)
     {
-        List<Monster> monsters = SoundManager.instance.GetActiveMonsters();
-        if (!monsters.Contains(this))
-            monsters.Add(this);
         source.clip = pClip;
     }
 
