@@ -7,7 +7,7 @@ using UnityEngine;
 public class Monster : MonoBehaviour
 {
     [SerializeField] private SpriteRenderer instrument;
-    [Space(5)][Header ("Instrument Audioclips:")]
+    [Space(5)][Header ("Instrument AudioClips:")]
     [SerializeField] private AudioClip drums;
     [SerializeField] private AudioClip trumpet;
     [SerializeField] private AudioClip guitar;
@@ -15,7 +15,8 @@ public class Monster : MonoBehaviour
     
     private Collider2D collider;
     private AudioSource source;
-    
+    private DragAndDrop.Type InstHold = DragAndDrop.Type.Null;
+
     private void Start()
     {
         //instrument = this.gameObject.GetComponentInChildren<SpriteRenderer>();
@@ -47,37 +48,15 @@ public class Monster : MonoBehaviour
 
     private void Reset()
     {
-        this.GetComponent<SpriteRenderer>().color = Color.white;
+        StopTrack();
         instrument.sprite = null;
-        source.Stop();
         source.clip = null;
+        InstHold = DragAndDrop.Type.Null;
     }
     
     public void SetInstrument(DragAndDrop.Type inst)
     {
-        switch (inst)
-        {
-            case(DragAndDrop.Type.Drums):
-                source.clip = drums;
-                break;
-            
-            case(DragAndDrop.Type.Trumpet):
-                source.clip = trumpet;
-                break;
-            
-            case(DragAndDrop.Type.Guitar):
-                source.clip = guitar;
-                break;
-            
-            case(DragAndDrop.Type.Keytar):
-                source.clip = keytar;
-                break;
-        }
-    }
-    
-    public void SetClip(AudioClip pClip)
-    {
-        source.clip = pClip;
+        InstHold = inst;
     }
 
     public SpriteRenderer GetInstrument()
@@ -87,6 +66,25 @@ public class Monster : MonoBehaviour
 
     private void StartTrack()
     {
+        switch (InstHold)
+        {
+            case(DragAndDrop.Type.Drums):
+                source.clip = drums;
+                break;
+            case(DragAndDrop.Type.Trumpet):
+                source.clip = trumpet;
+                break;
+            case(DragAndDrop.Type.Guitar):
+                source.clip = guitar;
+                break;
+            case(DragAndDrop.Type.Keytar):
+                source.clip = keytar;
+                break;
+            case (DragAndDrop.Type.KeytarGrid):
+                source.clip = null;
+                MusicGrid.instance.StartNotes();
+                break;
+        }
         if (source.clip != null)
             source.Play();
     }
@@ -94,5 +92,6 @@ public class Monster : MonoBehaviour
     private void StopTrack()
     {
         source.Stop();
+        MusicGrid.instance.StopNotes();
     }
 }

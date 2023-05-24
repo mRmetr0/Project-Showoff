@@ -15,17 +15,18 @@ public class DragAndDrop : MonoBehaviour
         KeytarGrid,
         Null
     }
-    private Collider2D collider;
-    private Vector3 basePos;
-    private Color baseColor;
-    private bool dragging = false;
-    private bool usable = true;
+    
+    private Collider2D _collider;
+    private Vector3 _basePos;
+    private Color _baseColor;
+    private bool _dragging = false;
+    private bool _usable = true;
     
     void Start ()
     {
-        collider = GetComponent<Collider2D>();
-        basePos = transform.position;
-        baseColor = GetComponent<SpriteRenderer>().color;
+        _collider = GetComponent<Collider2D>();
+        _basePos = transform.position;
+        _baseColor = GetComponent<SpriteRenderer>().color;
     }
 
     private void OnEnable()
@@ -45,18 +46,18 @@ public class DragAndDrop : MonoBehaviour
         Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         if (Input.GetMouseButtonDown(0))
         {
-            if (collider == Physics2D.OverlapPoint(mousePos) && usable)
+            if (_collider == Physics2D.OverlapPoint(mousePos) && _usable)
             {
-                dragging = true;
+                _dragging = true;
             }
         }
 
-        if (dragging)
+        if (_dragging)
             this.transform.position = mousePos;
         
         if (Input.GetMouseButtonUp(0))
         {
-            if (dragging)
+            if (_dragging)
             {
                 Collider2D[] colliders = Physics2D.OverlapPointAll(mousePos);
                 foreach (Collider2D hit in colliders)
@@ -65,10 +66,13 @@ public class DragAndDrop : MonoBehaviour
                     {
                         HandleReciever(hit.gameObject);
                     }
+                    
+                    if (type == Type.KeytarGrid)
+                        MusicGrid.instance.ActivateGrid(true);
                 }
             }
-            dragging = false;
-            transform.position = basePos;
+            _dragging = false;
+            transform.position = _basePos;
         }
     }
 
@@ -82,12 +86,12 @@ public class DragAndDrop : MonoBehaviour
 
     private void CanPlay()
     {
-        usable = true;
-        GetComponent<SpriteRenderer>().color = baseColor;
+        _usable = true;
+        GetComponent<SpriteRenderer>().color = _baseColor;
     }
     private void CannotPlay()
     {
-        usable = false;
+        _usable = false;
         GetComponent<SpriteRenderer>().color = Color.gray;
     }
 }

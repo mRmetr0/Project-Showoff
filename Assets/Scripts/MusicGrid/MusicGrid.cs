@@ -7,23 +7,24 @@ using UnityEngine.Tilemaps;
 [RequireComponent(typeof(AudioSource))]
 public class MusicGrid : MonoBehaviour
 {
+    public static MusicGrid instance;
     [SerializeField]private AudioClip clip;
     [SerializeField] private Grid grid;
     [SerializeField] private Tilemap tilemap;
     [SerializeField] private Tile selected;
     [SerializeField] private Tile empty;
-    [SerializeField] private float timing;
+    [SerializeField] private float bpm;
+    [SerializeField] private bool loop = false;
 
     private AudioSource _source;
     private Dictionary<int, List<int>> _currentNotes;
-    private float _currentTime = .0f;
-    private int _currentKey;
-    private int _beat;
-    private bool _scaleUp = true;
+    private float _bpmInSeconds = 0;
+    private int _beat = -1;
     private bool _canPlay = false;
 
-    private readonly float transpose = 0;
-    private float _note = -1;
+    private double _nextTime;
+
+    private readonly float _transpose = 0;
 
     private float[] _betterKeys = { 0, 2, 4, 5, 7, 9, 11, 12}; //White key, includes second octave
     
@@ -31,52 +32,70 @@ public class MusicGrid : MonoBehaviour
 
     private void Awake()
     {
+        if (instance == null)
+            instance = this;
+        else
+            Debug.LogError("More then one musicGrid");
+        
         _source = GetComponent<AudioSource>();
-        // _source.clip = clip;
-        // _source.Play();
-        _currentKey = 0;
+        ActivateGrid(false);
     }
 
     private void Update()
     {
         ClickGrid();
-        
         PlayNotes();
+    }
+
+    private void SetToPlay()
+    {
+        _bpmInSeconds = 60.0f / bpm;
+        _nextTime = AudioSettings.dspTime;
+        _canPlay = true;
+        _currentNotes = GetNotes();
+        _beat = -1;
+        //PrintDict(_currentNotes);
     }
 
     private void PlayNotes()
     {
-        if (Input.GetKeyDown("w"))
+        if (Input.GetKeyDown("w")) //Debug input
         {
-            _canPlay = true;
-            _currentNotes = GetNotes();
-            _currentTime = 0;
-            _beat = -1;
-            //PrintDict(_currentNotes);
+            SetToPlay();
         }
+        
         if (_canPlay)
         {
-            if (_currentTime >= timing)
+            if (AudioSettings.dspTime >= _nextTime)
             {
-                _currentTime = 0;
+                _nextTime += _bpmInSeconds;
                 _beat++;
 
-                List<int> notes = _currentNotes[_beat];
+                if (_beat >= _currentNotes.Count) 
+                {
+                    _canPlay = loop;
+                    _beat = 0;
+                    if (!_canPlay) return;
+                }
                 
+                List<int> notes = _currentNotes[_beat];
                 foreach (int note in notes)
                 {
-                    _source.pitch = Mathf.Pow(2, (_betterKeys[note]+transpose)/12.0f);
+                    _source.pitch = Mathf.Pow(2, (_betterKeys[note]+_transpose)/12.0f);
                     _source.PlayOneShot(clip);
                 }
-                
-                if (_beat >= _currentNotes.Count-1) 
-                {
-                    _canPlay = false;
-                    _beat = 0;
-                }
             }
-            _currentTime += Time.deltaTime;
         }
+    }
+
+    public void StartNotes()
+    { 
+        SetToPlay();
+    }
+
+    public void StopNotes()
+    {
+        _canPlay = false;
     }
 
     private void ClickGrid()
@@ -85,14 +104,16 @@ public class MusicGrid : MonoBehaviour
         {
             Vector3Int mousePos = grid.WorldToCell(Camera.main.ScreenToWorldPoint(Input.mousePosition));
             Tile tile = tilemap.GetTile(mousePos) as Tile;
-            if (tile == null) return;
+            if (tile == null)
+            {
+                ActivateGrid(false);
+                return;
+            }
             if (tile == selected)
                 tilemap.SetTile(mousePos, empty);
             else
                 tilemap.SetTile(mousePos, selected);
         }
-
-
     }
 
     private Dictionary<int, List<int>> GetNotes()
@@ -116,6 +137,11 @@ public class MusicGrid : MonoBehaviour
         return notes;
     }
 
+    public void ActivateGrid(bool active)
+    {
+        grid.gameObject.SetActive(active);
+    }
+    
     private void PrintDict(Dictionary<int, List<int>> dict)
     {
         foreach (var info in dict)
@@ -126,26 +152,5 @@ public class MusicGrid : MonoBehaviour
                 Debug.Log($"note: {thing}");
             }
         }        
-    }
-
-
-    private void KeyScaling()
-    {
-        if (_currentTime >= timing)
-        {
-            _currentTime = 0;
-            _currentKey += _scaleUp ? 1 : -1;
-            
-            if (_currentKey >= _betterKeys.Length - 1)
-                _scaleUp = false;
-            
-                        
-            if (_currentKey <= 0)
-                _scaleUp = true;
-                
-            _source.pitch = Mathf.Pow(2, (_betterKeys[_currentKey]+transpose)/12.0f);
-        }
-
-        _currentTime += Time.deltaTime;
     }
 }
