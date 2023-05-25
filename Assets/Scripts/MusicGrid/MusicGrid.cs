@@ -1,10 +1,11 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Security.Cryptography;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
-[RequireComponent(typeof(AudioSource))]
 public class MusicGrid : MonoBehaviour
 {
     public static MusicGrid instance;
@@ -15,8 +16,7 @@ public class MusicGrid : MonoBehaviour
     [SerializeField] private Tile empty;
     [SerializeField] private float bpm;
     [SerializeField] private bool loop = false;
-
-    private AudioSource _source;
+    
     private Dictionary<int, List<int>> _currentNotes;
     private float _bpmInSeconds = 0;
     private int _beat = -1;
@@ -28,8 +28,6 @@ public class MusicGrid : MonoBehaviour
 
     private float[] _betterKeys = { 0, 2, 4, 5, 7, 9, 11, 12}; //White key, includes second octave
     
-    
-
     private void Awake()
     {
         if (instance == null)
@@ -37,7 +35,6 @@ public class MusicGrid : MonoBehaviour
         else
             Debug.LogError("More then one musicGrid");
         
-        _source = GetComponent<AudioSource>();
         ActivateGrid(false);
     }
 
@@ -81,8 +78,8 @@ public class MusicGrid : MonoBehaviour
                 List<int> notes = _currentNotes[_beat];
                 foreach (int note in notes)
                 {
-                    _source.pitch = Mathf.Pow(2, (_betterKeys[note]+_transpose)/12.0f);
-                    _source.PlayOneShot(clip);
+                    float pitch = Mathf.Pow(2, (_betterKeys[note]+_transpose)/12.0f);
+                    PlaySound(clip, pitch);
                 }
             }
         }
@@ -96,6 +93,16 @@ public class MusicGrid : MonoBehaviour
     public void StopNotes()
     {
         _canPlay = false;
+    }
+
+    private void PlaySound(AudioClip pClip, float pPitch, float pVolume = 1.0f)
+    {
+        AudioSource soundSource = this.AddComponent<AudioSource>();
+        soundSource.pitch = pPitch;
+        soundSource.volume = pVolume;
+        soundSource.clip = pClip;
+        soundSource.Play();
+        Destroy(soundSource, pClip.length);
     }
 
     private void ClickGrid()
@@ -116,7 +123,7 @@ public class MusicGrid : MonoBehaviour
         }
     }
 
-    private Dictionary<int, List<int>> GetNotes()
+    public Dictionary<int, List<int>> GetNotes()
     {
         BoundsInt bounds = tilemap.cellBounds;
         Dictionary<int, List<int>> notes = new Dictionary<int, List<int>>();
@@ -146,11 +153,12 @@ public class MusicGrid : MonoBehaviour
     {
         foreach (var info in dict)
         {
-            Debug.Log($"Beat: {info.Key}");
+            string m = $"Beat: {info.Key}\n";
             foreach (var thing in dict[info.Key])
             {
-                Debug.Log($"note: {thing}");
+                m +=$"note: {thing}\n";
             }
+            Debug.Log(m);
         }        
     }
 }

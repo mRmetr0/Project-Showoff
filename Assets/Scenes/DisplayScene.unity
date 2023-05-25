@@ -363,6 +363,7 @@ GameObject:
   - component: {fileID: 218285817}
   - component: {fileID: 218285816}
   - component: {fileID: 218285815}
+  - component: {fileID: 218285820}
   m_Layer: 0
   m_Name: Reciever (3)
   m_TagString: Reciever
@@ -483,6 +484,7 @@ MonoBehaviour:
   trumpet: {fileID: 8300000, guid: bba048d57199f454ba054f930830659d, type: 3}
   guitar: {fileID: 8300000, guid: b4300d358747ed84e87042760911b098, type: 3}
   keytar: {fileID: 8300000, guid: 8f72ecdeb31f17740a98cfb976580b85, type: 3}
+  keytarGrid: {fileID: 8300000, guid: 72254bd2cd1a2ec4daea0016076eaafb, type: 3}
 --- !u!61 &218285817
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -500,14 +502,14 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 1.23, y: 1.23}
+    oldSize: {x: 1.4285715, y: 1.4313616}
     newSize: {x: 1, y: 1}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 1.3, y: 1.4}
   m_EdgeRadius: 0
 --- !u!212 &218285818
 SpriteRenderer:
@@ -550,7 +552,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: f2df43cb44f36b549a42578e0e1a3bd8, type: 3}
+  m_Sprite: {fileID: -1804517004, guid: bed298cdfd0fe1546b654eb61f98e4fa, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -577,6 +579,27 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!95 &218285820
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 218285814}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 838549b35cec3d0408f53f2cfb6ef75b, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &307621206
 GameObject:
   m_ObjectHideFlags: 0
@@ -2069,6 +2092,7 @@ MonoBehaviour:
   trumpet: {fileID: 8300000, guid: 2f71c9b41b2db6b49866dc46848692e8, type: 3}
   guitar: {fileID: 8300000, guid: 8df17ceeebe78e04c9cca90edb290f81, type: 3}
   keytar: {fileID: 8300000, guid: 4c48f4fab5f3a87418dfde230e24fda4, type: 3}
+  keytarGrid: {fileID: 8300000, guid: 497ea0a0ac33a5c419e5e3bd11765c64, type: 3}
 --- !u!61 &671723728
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -2371,6 +2395,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7dd13e5c7a9f60d4db23200192f6dbca, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _bpm: 100
 --- !u!4 &1237592064
 Transform:
   m_ObjectHideFlags: 0
@@ -2796,6 +2821,7 @@ MonoBehaviour:
   trumpet: {fileID: 8300000, guid: 1b0648311e5d15e4ab7182021970a179, type: 3}
   guitar: {fileID: 8300000, guid: 72df5235be2e74049b8e77562062c728, type: 3}
   keytar: {fileID: 8300000, guid: 0294ce28ccf27e745b61dff570a3c7d4, type: 3}
+  keytarGrid: {fileID: 8300000, guid: a3ef05473484e0c428c63c8c1b463ebd, type: 3}
 --- !u!61 &1533385207
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -3023,6 +3049,7 @@ MonoBehaviour:
   trumpet: {fileID: 8300000, guid: d64bcaa7badafb04aab7a42a0ec7ad8e, type: 3}
   guitar: {fileID: 8300000, guid: 41bff5742b19aa24bad5879906a16df5, type: 3}
   keytar: {fileID: 8300000, guid: cc1f49f41e678aa4cae8ec08deedd3c2, type: 3}
+  keytarGrid: {fileID: 0}
 --- !u!61 &1535048930
 BoxCollider2D:
   m_ObjectHideFlags: 0
