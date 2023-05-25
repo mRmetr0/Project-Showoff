@@ -152,6 +152,5 @@ public class Monster : MonoBehaviour
         _canPlay = true;
         _currentNotes = MusicGrid.instance.GetNotes();
         _beat = -1;
-        //PrintDict(_currentNotes);
     }
 }
