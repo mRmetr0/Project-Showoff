@@ -21,93 +21,36 @@ public class MusicGrid : MonoBehaviour
     private float _bpmInSeconds = 0;
     private int _beat = -1;
     private bool _canPlay = false;
+    private bool _intearactalbe = false;
 
     private double _nextTime;
 
     private readonly float _transpose = 0;
 
-    private float[] _betterKeys = { 0, 2, 4, 5, 7, 9, 11, 12}; //White key, includes second octave
+    private float[] _betterKeys = { 0, 2, 4, 5, 7, 9, 11, 12};
+
+    public bool Interactable => _intearactalbe;
     
     private void Awake()
     {
-        if (instance == null)
-            instance = this;
-        else
+        if (instance != null)
+        {
             Debug.LogError("More then one musicGrid");
-        
+            return;
+
+        }
+        instance = this;
         ActivateGrid(false);
     }
 
     private void Update()
     {
         ClickGrid();
-        PlayNotes();
-    }
-
-    private void SetToPlay()
-    {
-        _bpmInSeconds = 60.0f / bpm;
-        _nextTime = AudioSettings.dspTime;
-        _canPlay = true;
-        _currentNotes = GetNotes();
-        _beat = -1;
-        //PrintDict(_currentNotes);
-    }
-
-    private void PlayNotes()
-    {
-        if (Input.GetKeyDown("w")) //Debug input
-        {
-            SetToPlay();
-        }
-        
-        if (_canPlay)
-        {
-            if (AudioSettings.dspTime >= _nextTime)
-            {
-                _nextTime += _bpmInSeconds;
-                _beat++;
-
-                if (_beat >= _currentNotes.Count) 
-                {
-                    _canPlay = loop;
-                    _beat = 0;
-                    if (!_canPlay) return;
-                }
-                
-                List<int> notes = _currentNotes[_beat];
-                foreach (int note in notes)
-                {
-                    float pitch = Mathf.Pow(2, (_betterKeys[note]+_transpose)/12.0f);
-                    PlaySound(clip, pitch);
-                }
-            }
-        }
-    }
-
-    public void StartNotes()
-    { 
-        SetToPlay();
-    }
-
-    public void StopNotes()
-    {
-        _canPlay = false;
-    }
-
-    private void PlaySound(AudioClip pClip, float pPitch, float pVolume = 1.0f)
-    {
-        AudioSource soundSource = this.AddComponent<AudioSource>();
-        soundSource.pitch = pPitch;
-        soundSource.volume = pVolume;
-        soundSource.clip = pClip;
-        soundSource.Play();
-        Destroy(soundSource, pClip.length);
     }
 
     private void ClickGrid()
     {
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0) && _intearactalbe)
         {
             Vector3Int mousePos = grid.WorldToCell(Camera.main.ScreenToWorldPoint(Input.mousePosition));
             Tile tile = tilemap.GetTile(mousePos) as Tile;
@@ -147,18 +90,6 @@ public class MusicGrid : MonoBehaviour
     public void ActivateGrid(bool active)
     {
         grid.gameObject.SetActive(active);
-    }
-    
-    private void PrintDict(Dictionary<int, List<int>> dict)
-    {
-        foreach (var info in dict)
-        {
-            string m = $"Beat: {info.Key}\n";
-            foreach (var thing in dict[info.Key])
-            {
-                m +=$"note: {thing}\n";
-            }
-            Debug.Log(m);
-        }        
+        _intearactalbe = active;
     }
 }
