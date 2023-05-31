@@ -23,19 +23,20 @@ public class Monster : MonoBehaviour
     private float _bpmInSeconds = 0;
     private int _beat = -1;
     private bool _canPlay = false;
+    private bool _clickable = true;
     
     private double _nextTime;
 
-    private readonly float _transpose = 0;
+    private readonly float _transpose = 5;
 
     private float[] _betterKeys = { 0, 2, 4, 5, 7, 9, 11, 12}; //White key, includes second octave
 
-    private void Start()
+    private void Awake()
     {
-        //instrument = this.gameObject.GetComponentInChildren<SpriteRenderer>();
         collider = GetComponent<Collider2D>();
         source = GetComponent<AudioSource>();
         source.loop = true;
+        
     }
 
     private void OnEnable()
@@ -53,7 +54,7 @@ public class Monster : MonoBehaviour
     private void Update()
     {   
         Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        if (Input.GetMouseButtonDown(0) && collider == Physics2D.OverlapPoint(mousePos))
+        if (Input.GetMouseButtonDown(0) && collider == Physics2D.OverlapPoint(mousePos) && _clickable && !MusicGrid.instance.Interactable)
         {
             Reset();
         }
@@ -97,7 +98,7 @@ public class Monster : MonoBehaviour
             case(DragAndDrop.Type.Drums):
                 source.clip = drums;
                 break;
-            case(DragAndDrop.Type.Trumpet):
+            case(DragAndDrop.Type.Bass):
                 source.clip = trumpet;
                 break;
             case(DragAndDrop.Type.Guitar):
@@ -113,6 +114,8 @@ public class Monster : MonoBehaviour
         }
         if (source.clip != null)
             source.Play();
+
+        _clickable = false;
     }
 
     private void PlayGrid()
@@ -138,13 +141,6 @@ public class Monster : MonoBehaviour
             }
         }
     }
-
-    private void StopTrack()
-    {
-        source.Stop();
-        _canPlay = false;
-    }
-    
     private void SetToPlay()
     {
         _bpmInSeconds = 60.0f / SoundManager.instance.bpm;
@@ -152,5 +148,11 @@ public class Monster : MonoBehaviour
         _canPlay = true;
         _currentNotes = MusicGrid.instance.GetNotes();
         _beat = -1;
+    }
+    private void StopTrack()
+    {
+        source.Stop();
+        _canPlay = false;
+        _clickable = true;
     }
 }

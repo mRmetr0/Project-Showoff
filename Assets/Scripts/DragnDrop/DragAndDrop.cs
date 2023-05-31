@@ -9,24 +9,24 @@ public class DragAndDrop : MonoBehaviour
     public enum Type
     {
         Drums,
-        Trumpet, 
+        Bass, 
         Guitar,
         Keytar,
         KeytarGrid,
         Null
     }
-    
+
+    private SpriteRenderer _renderer;
     private Collider2D _collider;
     private Vector3 _basePos;
-    private Color _baseColor;
     private bool _dragging = false;
     private bool _usable = true;
     
     void Start ()
     {
-        _collider = GetComponent<Collider2D>();
         _basePos = transform.position;
-        _baseColor = GetComponent<SpriteRenderer>().color;
+        _collider = GetComponent<Collider2D>();
+        _renderer = GetComponent<SpriteRenderer>();
     }
 
     private void OnEnable()
@@ -78,20 +78,18 @@ public class DragAndDrop : MonoBehaviour
 
     private void HandleReciever(GameObject reciever)
     {
-        reciever.GetComponent<SpriteRenderer>().color = this.GetComponent<SpriteRenderer>().color;
-        //reciever.GetComponent<Monster>().SetClip(clip);
         reciever.GetComponent<Monster>().SetInstrument(type);
-        reciever.GetComponent<Monster>().GetInstrument().sprite = this.GetComponent<SpriteRenderer>().sprite;
+        reciever.GetComponent<Monster>().GetInstrument().sprite = _renderer.sprite;
     }
 
     private void CanPlay()
     {
         _usable = true;
-        GetComponent<SpriteRenderer>().color = _baseColor;
+        _renderer.color = Color.white;
     }
     private void CannotPlay()
     {
         _usable = false;
-        GetComponent<SpriteRenderer>().color = Color.gray;
+        _renderer.color = Color.gray;
     }
 }
