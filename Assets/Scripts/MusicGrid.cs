@@ -9,23 +9,13 @@ using UnityEngine.Tilemaps;
 public class MusicGrid : MonoBehaviour
 {
     public static MusicGrid instance;
-    [SerializeField]private AudioClip clip;
     [SerializeField] private Grid grid;
     [SerializeField] private Tilemap tilemap;
     [SerializeField] private Tile selected;
     [SerializeField] private Tile empty;
-    [SerializeField] private float bpm;
-    [SerializeField] private bool loop = false;
     
     private Dictionary<int, List<int>> _currentNotes;
-    private float _bpmInSeconds = 0;
-    private int _beat = -1;
-    private bool _canPlay = false;
     private bool _intearactalbe = false;
-
-    private double _nextTime;
-
-    private readonly float _transpose = 0;
 
     private float[] _betterKeys = { 0, 2, 4, 5, 7, 9, 11, 12};
 

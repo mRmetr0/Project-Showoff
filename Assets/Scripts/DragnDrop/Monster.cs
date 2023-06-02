@@ -15,9 +15,9 @@ public class Monster : MonoBehaviour
     [SerializeField] private AudioClip keytar;
     [SerializeField] private AudioClip keytarGrid;
     
-    private Collider2D collider;
-    private AudioSource source;
-    private DragAndDrop.Type InstHold = DragAndDrop.Type.Null;
+    private Collider2D _collider;
+    private AudioSource _source;
+    private DragAndDrop.Type _instHold = DragAndDrop.Type.Null;
     
     private Dictionary<int, List<int>> _currentNotes;
     private float _bpmInSeconds = 0;
@@ -33,9 +33,9 @@ public class Monster : MonoBehaviour
 
     private void Awake()
     {
-        collider = GetComponent<Collider2D>();
-        source = GetComponent<AudioSource>();
-        source.loop = true;
+        _collider = GetComponent<Collider2D>();
+        _source = GetComponent<AudioSource>();
+        _source.loop = true;
         
     }
 
@@ -54,7 +54,7 @@ public class Monster : MonoBehaviour
     private void Update()
     {   
         Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        if (Input.GetMouseButtonDown(0) && collider == Physics2D.OverlapPoint(mousePos) && _clickable && !MusicGrid.instance.Interactable)
+        if (Input.GetMouseButtonDown(0) && _collider == Physics2D.OverlapPoint(mousePos) && _clickable && !MusicGrid.instance.Interactable)
         {
             Reset();
         }
@@ -76,14 +76,14 @@ public class Monster : MonoBehaviour
     {
         StopTrack();
         instrument.sprite = null;
-        source.clip = null;
-        InstHold = DragAndDrop.Type.Null;
+        _source.clip = null;
+        _instHold = DragAndDrop.Type.Null;
         _canPlay = false;
     }
     
     public void SetInstrument(DragAndDrop.Type inst)
     {
-        InstHold = inst;
+        _instHold = inst;
     }
 
     public SpriteRenderer GetInstrument()
@@ -93,51 +93,49 @@ public class Monster : MonoBehaviour
 
     private void StartTrack()
     {
-        switch (InstHold)
+        switch (_instHold)
         {
             case(DragAndDrop.Type.Drums):
-                source.clip = drums;
+                _source.clip = drums;
                 break;
             case(DragAndDrop.Type.Bass):
-                source.clip = trumpet;
+                _source.clip = trumpet;
                 break;
             case(DragAndDrop.Type.Guitar):
-                source.clip = guitar;
+                _source.clip = guitar;
                 break;
             case(DragAndDrop.Type.Keytar):
-                source.clip = keytar;
+                _source.clip = keytar;
                 break;
             case (DragAndDrop.Type.KeytarGrid):
-                source.clip = null;
+                _source.clip = null;
                 SetToPlay();
                 break;
         }
-        if (source.clip != null)
-            source.Play();
+        if (_source.clip != null)
+            _source.Play();
 
         _clickable = false;
     }
 
     private void PlayGrid()
     {
-        if (_canPlay)
+        if (!_canPlay) return;
+        if (AudioSettings.dspTime >= _nextTime)
         {
-            if (AudioSettings.dspTime >= _nextTime)
-            {
-                _nextTime += _bpmInSeconds;
-                _beat++;
+            _nextTime += _bpmInSeconds;
+            _beat++;
 
-                if (_beat >= _currentNotes.Count) 
-                {
-                    _beat = 0;
-                }
-                
-                List<int> notes = _currentNotes[_beat];
-                foreach (int note in notes)
-                {
-                    float pitch = Mathf.Pow(2, (_betterKeys[note]+_transpose)/12.0f);
-                    playSound(keytarGrid, pitch);
-                }
+            if (_beat >= _currentNotes.Count) 
+            {
+                _beat = 0;
+            }
+            
+            List<int> notes = _currentNotes[_beat];
+            foreach (int note in notes)
+            {
+                float pitch = Mathf.Pow(2, (_betterKeys[note]+_transpose)/12.0f);
+                playSound(keytarGrid, pitch);
             }
         }
     }
@@ -151,7 +149,7 @@ public class Monster : MonoBehaviour
     }
     private void StopTrack()
     {
-        source.Stop();
+        _source.Stop();
         _canPlay = false;
         _clickable = true;
     }

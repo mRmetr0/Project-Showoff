@@ -257,7 +257,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   type: 2
-  _renderer: {fileID: 0}
 --- !u!61 &117961611
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -344,7 +343,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 117961609}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -8.04, y: -0.21, z: 0}
+  m_LocalPosition: {x: -8.06, y: -0.3, z: 0}
   m_LocalScale: {x: 2, y: 2, z: 2}
   m_ConstrainProportionsScale: 1
   m_Children: []
@@ -481,9 +480,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   instrument: {fileID: 1288995142}
-  drums: {fileID: 8300000, guid: b4c5d264e4d128d44aec0da157a9719c, type: 3}
-  trumpet: {fileID: 8300000, guid: bba048d57199f454ba054f930830659d, type: 3}
-  guitar: {fileID: 8300000, guid: b4300d358747ed84e87042760911b098, type: 3}
+  drums: {fileID: 8300000, guid: 45da18a1812ff8549b8e84123b630705, type: 3}
+  trumpet: {fileID: 8300000, guid: 96220c8fb698253448f6dc45146e6e8a, type: 3}
+  guitar: {fileID: 8300000, guid: 0a76365925f8e3240be71c0dc10ef77c, type: 3}
   keytar: {fileID: 8300000, guid: 8f72ecdeb31f17740a98cfb976580b85, type: 3}
   keytarGrid: {fileID: 8300000, guid: 72254bd2cd1a2ec4daea0016076eaafb, type: 3}
 --- !u!61 &218285817
@@ -717,7 +716,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   type: 0
-  _renderer: {fileID: 0}
 --- !u!61 &330462500
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -804,7 +802,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 330462498}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -7.9, y: 3.46, z: 0}
+  m_LocalPosition: {x: -7.59, y: 3.44, z: 0}
   m_LocalScale: {x: 2, y: 2, z: 2}
   m_ConstrainProportionsScale: 1
   m_Children: []
@@ -1843,13 +1841,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a731c49b86bf9a547aa2d43628de1702, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  clip: {fileID: 8300000, guid: 72254bd2cd1a2ec4daea0016076eaafb, type: 3}
   grid: {fileID: 2040449020}
   tilemap: {fileID: 352897984}
   selected: {fileID: 11400000, guid: 79641476064f4c6499c7ce3c6fdb023a, type: 2}
   empty: {fileID: 11400000, guid: 63775a7fa9af4764db02a83f8098713f, type: 2}
-  bpm: 100
-  loop: 1
 --- !u!82 &617020327
 AudioSource:
   m_ObjectHideFlags: 0
@@ -2091,7 +2086,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   instrument: {fileID: 307621208}
-  drums: {fileID: 8300000, guid: b4c5d264e4d128d44aec0da157a9719c, type: 3}
+  drums: {fileID: 8300000, guid: 21622df12f2b82a4ca6e2db0b2396e4c, type: 3}
   trumpet: {fileID: 8300000, guid: 2f71c9b41b2db6b49866dc46848692e8, type: 3}
   guitar: {fileID: 8300000, guid: 8df17ceeebe78e04c9cca90edb290f81, type: 3}
   keytar: {fileID: 8300000, guid: 4c48f4fab5f3a87418dfde230e24fda4, type: 3}
@@ -2227,7 +2222,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &860157811
 Transform:
   m_ObjectHideFlags: 0
@@ -2255,8 +2250,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5865657f4bd50584d868e496f1774b5b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tile: []
-  pendingColliders: []
+  notePrefab: {fileID: 8420442756959757026, guid: 79c6fa9e07b378c4a964947785da0762, type: 3}
+  tiles:
+  - {fileID: 1535048930}
+  - {fileID: 1533385207}
+  - {fileID: 671723728}
+  - {fileID: 218285817}
 --- !u!1 &1114724797
 GameObject:
   m_ObjectHideFlags: 0
@@ -2665,7 +2664,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   type: 4
-  _renderer: {fileID: 0}
 --- !u!61 &1494216757
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -2752,7 +2750,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1494216755}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -8.09, y: 1.67, z: 0}
+  m_LocalPosition: {x: -7.81, y: 1.46, z: 0}
   m_LocalScale: {x: 2, y: 2, z: 2}
   m_ConstrainProportionsScale: 1
   m_Children: []
@@ -2889,7 +2887,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   instrument: {fileID: 565095550}
-  drums: {fileID: 8300000, guid: b4c5d264e4d128d44aec0da157a9719c, type: 3}
+  drums: {fileID: 8300000, guid: 4be4ae53b6ccbcc42a24d1397b00de96, type: 3}
   trumpet: {fileID: 8300000, guid: 1b0648311e5d15e4ab7182021970a179, type: 3}
   guitar: {fileID: 8300000, guid: 72df5235be2e74049b8e77562062c728, type: 3}
   keytar: {fileID: 8300000, guid: 0294ce28ccf27e745b61dff570a3c7d4, type: 3}
@@ -2911,7 +2909,7 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 1.6666665, y: 1.669108}
+    oldSize: {x: 1.429968, y: 1.4285715}
     newSize: {x: 4.9999995, y: 5.007324}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
@@ -2961,7 +2959,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: -1068153896, guid: dc62dad44e325884b845753fd5aee102, type: 3}
+  m_Sprite: {fileID: -1768315564, guid: d2d6f0e2d37124744adcfb53f7a58dec, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -2998,7 +2996,7 @@ Animator:
   m_GameObject: {fileID: 1533385204}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: bf4ae001f44aa7a4b96dff795f1fa4ad, type: 2}
+  m_Controller: {fileID: 9100000, guid: 5482727806ef3a24591ed00872059ae2, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -3139,11 +3137,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   instrument: {fileID: 1886830449}
-  drums: {fileID: 8300000, guid: b4c5d264e4d128d44aec0da157a9719c, type: 3}
+  drums: {fileID: 8300000, guid: 0f39bc9cb760c754a8044bc87a831372, type: 3}
   trumpet: {fileID: 8300000, guid: d64bcaa7badafb04aab7a42a0ec7ad8e, type: 3}
   guitar: {fileID: 8300000, guid: 41bff5742b19aa24bad5879906a16df5, type: 3}
   keytar: {fileID: 8300000, guid: cc1f49f41e678aa4cae8ec08deedd3c2, type: 3}
-  keytarGrid: {fileID: 0}
+  keytarGrid: {fileID: 8300000, guid: 497ea0a0ac33a5c419e5e3bd11765c64, type: 3}
 --- !u!61 &1535048930
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -3161,7 +3159,7 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 1.2475634, y: 1.25}
+    oldSize: {x: 1.2500001, y: 1.2524415}
     newSize: {x: 1, y: 1}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
@@ -3211,7 +3209,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 455873691, guid: 79b2770ae4735cc4c800744cef6e0971, type: 3}
+  m_Sprite: {fileID: -1188345096, guid: 02443a450f12c554cae55c34f7969566, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -3318,7 +3316,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 76b6eab716527ed45985bea61afb755b, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.9245283, g: 0.9245283, b: 0.9245283, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -3609,7 +3607,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2079490312}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -8.16, y: -2.97, z: 0}
+  m_LocalPosition: {x: -7.99, y: -2.92, z: 0}
   m_LocalScale: {x: 2, y: 2, z: 2}
   m_ConstrainProportionsScale: 1
   m_Children: []
@@ -3629,7 +3627,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   type: 1
-  _renderer: {fileID: 0}
 --- !u!212 &2079490318
 SpriteRenderer:
   m_ObjectHideFlags: 0
