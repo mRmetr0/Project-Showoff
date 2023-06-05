@@ -8,11 +8,15 @@ using UnityEngine;
 using Object = System.Object;
 using Random = System.Random;
 
+[RequireComponent(typeof(AudioSource))]
 public class TapGame : MonoBehaviour
 {
     [SerializeField] private GameObject notePrefab;
     [SerializeField] private Collider2D[] tiles;
+    [SerializeField] private AudioClip feedbackClip;
+    [SerializeField] [Range(0.0f, 10.0f)] private int feedback;
     private List<TapInfo> _pendingColliders = new List<TapInfo>();
+    private AudioSource _source;
 
     private float _bpmInSeconds = 0;
     private int _score = 0;
@@ -24,6 +28,7 @@ public class TapGame : MonoBehaviour
     {
         ButtonManager.OnPlay += StartMusic;
         ButtonManager.OnStop += StopMusic;
+        _source = GetComponent<AudioSource>();
     }
 
     private void OnDisable()
@@ -88,8 +93,10 @@ public class TapGame : MonoBehaviour
             TapInfo info = ColliderFromPending(clicked);
             if (info != null)
             {
-                _score += info.GetScore();
-                Debug.Log(_score);
+                int score = info.GetScore();
+                if (score >= feedback) _source.PlayOneShot(feedbackClip);
+                _score += score;
+                Debug.Log($"Score: {_score}");
                 _pendingColliders.Remove(info);
                 Destroy(info);
                 return;
@@ -172,7 +179,11 @@ class TapInfo : ScriptableObject
 
     public int GetScore()
     {
-        int score = (int)(_t * 10);
+        int score;
+        if (_t > 1) score = (int)((1f - (_t - 1f)) * 10f);
+        else score = (int)(_t * 10);
+        score = Mathf.Clamp(score, 0, 11);
+        Debug.Log($"Added score: {score}");
         return score;
     }
 
