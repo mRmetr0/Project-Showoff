@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: dc62dad44e325884b845753fd5aee102
+guid: ab60bf3d4dd695f419441382c0126a74
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -47,7 +47,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 300
+  spritePixelsToUnits: 400
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -117,7 +117,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: monster idle_0
+      name: DRUMS SPRITE SHEET_0
       rect:
         serializedVersion: 2
         x: 0
@@ -131,14 +131,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 936b3705fd33574479f79ffc9fa85764
-      internalID: -1068153896
+      spriteID: 5d9582d6332617e4484477fa346552c4
+      internalID: -1540964059
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: monster idle_1
+      name: DRUMS SPRITE SHEET_1
       rect:
         serializedVersion: 2
         x: 500
@@ -152,14 +152,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: f94b8a40d571a804ea624c83543a8eff
-      internalID: 1085925309
+      spriteID: c6f908967a2a8f449b5012ae019c0c1c
+      internalID: 758266366
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: monster idle_2
+      name: DRUMS SPRITE SHEET_2
       rect:
         serializedVersion: 2
         x: 1000
@@ -173,14 +173,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: e288096228c8fd848966903cf81a402f
-      internalID: 1057931811
+      spriteID: 701c7c7765e55754e9a2dfaf54d53189
+      internalID: -574084338
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: monster idle_3
+      name: DRUMS SPRITE SHEET_3
       rect:
         serializedVersion: 2
         x: 1500
@@ -194,14 +194,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: fd5c1cec750fab6499fce90e9f4c5f57
-      internalID: -1708476880
+      spriteID: 51d631d0efa7ded42afc96334d955630
+      internalID: -539501095
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: monster idle_4
+      name: DRUMS SPRITE SHEET_4
       rect:
         serializedVersion: 2
         x: 2000
@@ -215,50 +215,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: e64dbefdbd40ef84f9032941555a962c
-      internalID: -2065467605
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: monster idle_5
-      rect:
-        serializedVersion: 2
-        x: 2500
-        y: 0
-        width: 500
-        height: 500
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 87ea4cfce5d349d4488dd9b430d00e4a
-      internalID: 1913918849
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: monster idle_6
-      rect:
-        serializedVersion: 2
-        x: 3000
-        y: 0
-        width: 500
-        height: 500
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 12eda9e64d498064f968fd9d0367290f
-      internalID: -1364345022
+      spriteID: b4492302783e2864fb195050eed69345
+      internalID: 158593989
       vertices: []
       indices: 
       edges: []
@@ -274,13 +232,11 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      monster idle_0: -1068153896
-      monster idle_1: 1085925309
-      monster idle_2: 1057931811
-      monster idle_3: -1708476880
-      monster idle_4: -2065467605
-      monster idle_5: 1913918849
-      monster idle_6: -1364345022
+      DRUMS SPRITE SHEET_0: -1540964059
+      DRUMS SPRITE SHEET_1: 758266366
+      DRUMS SPRITE SHEET_2: -574084338
+      DRUMS SPRITE SHEET_3: -539501095
+      DRUMS SPRITE SHEET_4: 158593989
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0

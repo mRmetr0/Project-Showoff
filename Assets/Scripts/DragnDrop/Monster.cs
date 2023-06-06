@@ -2,9 +2,10 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
+using UnityEditor.Animations;
 using UnityEngine;
 
-[RequireComponent(typeof(AudioSource))]
+[RequireComponent(typeof(AudioSource))][RequireComponent(typeof(AnimatorController))]
 public class Monster : MonoBehaviour
 {
     [SerializeField] private SpriteRenderer instrument;
@@ -18,7 +19,8 @@ public class Monster : MonoBehaviour
     private Collider2D _collider;
     private AudioSource _source;
     private DragAndDrop.Type _instHold = DragAndDrop.Type.Null;
-    
+    private Animator _animator;
+
     private Dictionary<int, List<int>> _currentNotes;
     private float _bpmInSeconds = 0;
     private int _beat = -1;
@@ -35,6 +37,7 @@ public class Monster : MonoBehaviour
     {
         _collider = GetComponent<Collider2D>();
         _source = GetComponent<AudioSource>();
+        _animator = GetComponent<Animator>();
         _source.loop = true;
         
     }
@@ -79,11 +82,13 @@ public class Monster : MonoBehaviour
         _source.clip = null;
         _instHold = DragAndDrop.Type.Null;
         _canPlay = false;
+        SetAnimation();
     }
     
     public void SetInstrument(DragAndDrop.Type inst)
     {
         _instHold = inst;
+        SetAnimation();
     }
 
     public SpriteRenderer GetInstrument()
@@ -152,5 +157,29 @@ public class Monster : MonoBehaviour
         _source.Stop();
         _canPlay = false;
         _clickable = true;
+    }
+
+    private void SetAnimation()
+    {
+        _animator.SetBool("playBass", false);
+        _animator.SetBool("playGuitar", false);
+        _animator.SetBool("playDrums", false);
+        
+        switch (_instHold){
+            case DragAndDrop.Type.Bass:
+                _animator.SetBool("playBass", true);
+                break;
+            case DragAndDrop.Type.Guitar:
+                _animator.SetBool("playGuitar", true);
+                break;
+            case DragAndDrop.Type.Drums:
+                _animator.SetBool("playDrums", true);
+                break;
+            case DragAndDrop.Type.Keytar:
+            case DragAndDrop.Type.KeytarGrid:
+            case DragAndDrop.Type.Null:
+            default:
+                break;
+        }
     }
 }

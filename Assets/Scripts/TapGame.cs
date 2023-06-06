@@ -12,19 +12,22 @@ using Random = System.Random;
 public class TapGame : MonoBehaviour
 {
     [SerializeField] private GameObject notePrefab;
+    [SerializeField] private GameObject outlinePrefab;
     [SerializeField] private Collider2D[] tiles;
     [SerializeField] private AudioClip feedbackClip;
+    [SerializeField] private AudioClip missedNoteClip;
     [SerializeField] [Range(0.0f, 10.0f)] private int feedback;
-    private List<TapInfo> _pendingColliders = new List<TapInfo>();
+    private List<TapInfo> _pendingColliders = new ();
     private AudioSource _source;
 
     private float _bpmInSeconds = 0;
     private int _score = 0;
+    private int _startTiles = 10;
     private bool _canPlay = false;
     
     private double _nextTime;
     
-    private void OnEnable()
+    private void OnEnable() 
     {
         ButtonManager.OnPlay += StartMusic;
         ButtonManager.OnStop += StopMusic;
@@ -49,14 +52,23 @@ public class TapGame : MonoBehaviour
         }
         TapMonster();
 
-        foreach (TapInfo info in _pendingColliders)
+        
+        for (int i = _pendingColliders.Count - 1; i >= 0; i--)
         {
+            TapInfo info = _pendingColliders[i];
             info.LerpPos(0.01f);
+            if (info.toDelete)
+            {
+                _pendingColliders.Remove(info);
+                Destroy(info);
+                _source.PlayOneShot(missedNoteClip);
+            }
         }
     }
 
     private void SetMonster()
     {
+        if (_pendingColliders.Count > 2) return;
         
         Random r = new();
         Collider2D monster = tiles[r.Next(0, tiles.Length)];
@@ -67,18 +79,17 @@ public class TapGame : MonoBehaviour
         } while (InPending(monster));
 
         GameObject note = Instantiate(notePrefab, monster.transform.position + new Vector3(0, 7, -2), Quaternion.identity);
+        GameObject outline = null;
+        if (_startTiles > 0)
+        {
+            outline = Instantiate(outlinePrefab, monster.transform.position + (Vector3.forward * -2.1f), Quaternion.identity);
+            _startTiles--;
+        }
 
         TapInfo info = ScriptableObject.CreateInstance<TapInfo>();
-        info.Instantiate(monster, _nextTime, note);
+        info.Instantiate(monster, _nextTime, note, outline);
 
         _pendingColliders.Add(info);
-        
-        if (_pendingColliders.Count > 2)
-        {
-            TapInfo toRemove = _pendingColliders[0];
-            _pendingColliders.Remove(toRemove);
-            Destroy(toRemove);
-        }
     }
 
     private void TapMonster()
@@ -90,7 +101,7 @@ public class TapGame : MonoBehaviour
         if (colliders.Length <= 0) return;
         foreach (Collider2D clicked in colliders)
         {
-            TapInfo info = ColliderFromPending(clicked);
+            TapInfo info = ColliderInPending(clicked);
             if (info != null)
             {
                 int score = info.GetScore();
@@ -109,6 +120,7 @@ public class TapGame : MonoBehaviour
         _bpmInSeconds = 60.0f / SoundManager.instance.bpm;
         _nextTime = AudioSettings.dspTime;
         _canPlay = true;
+        _startTiles = 3;
     }
 
     public void StopMusic()
@@ -120,7 +132,6 @@ public class TapGame : MonoBehaviour
             _pendingColliders.Remove(info);
             Destroy(info);
         }
-
         _pendingColliders.Clear();
     }
 
@@ -130,17 +141,15 @@ public class TapGame : MonoBehaviour
         {
             if (info.collider == collider) return true;
         }
-
         return false;
     }
 
-    private TapInfo ColliderFromPending(Collider2D collider)
+    private TapInfo ColliderInPending(Collider2D collider)
     {
         foreach (TapInfo info in _pendingColliders)
         {
             if (info.collider == collider) return info;
         }
-
         return null;
     }
 }
@@ -149,32 +158,40 @@ class TapInfo : ScriptableObject
 {
     public Collider2D collider;
     public GameObject note;
+    public GameObject outline;
     public Vector3 startPos;
-    public double beat;
     private float _t = 0;
+    private bool _moveUp = true;
+    public bool toDelete;
 
-    public TapInfo(Collider2D pCollider, double pBeat, GameObject pNote)
+    public void Instantiate(Collider2D pCollider, double pBeat, GameObject pNote, GameObject pOutLine = null)
     {
         collider = pCollider;
-        beat = pBeat;
         note = pNote;
         startPos = pNote.gameObject.transform.position;
-
-    }
-
-    public void Instantiate(Collider2D pCollider, double pBeat, GameObject pNote)
-    {
-        collider = pCollider;
-        beat = pBeat;
-        note = pNote;
-        startPos = pNote.gameObject.transform.position;
+        outline = pOutLine;
     }
 
     public void LerpPos(float speed = 0.05f)
     {
-        _t += speed;
-        var position = collider.gameObject.transform.position;
-        note.transform.position = Vector3.Lerp(startPos, new Vector3(position.x, position.y, -2), _t);
+        if (_moveUp)
+        {
+            _t += speed;
+            var position = collider.gameObject.transform.position;
+            note.transform.position = Vector3.Lerp(startPos, new Vector3(position.x, position.y, -2), _t);
+            Debug.Log(_t > 1);
+            if (_t > 1) _moveUp = false;
+        }
+        else
+        {
+            _t -= speed*3;
+            if (_t <= 0)
+            {
+                Debug.Log("Delete note plz");
+                toDelete = true;
+            }
+        }
+        Debug.Log(_t);
     }
 
     public int GetScore()
@@ -190,5 +207,6 @@ class TapInfo : ScriptableObject
     private void OnDestroy()
     {
         Destroy(note);
+        if (outline != null) Destroy(outline.gameObject);
     }
 }

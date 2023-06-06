@@ -79,7 +79,7 @@ public class DragAndDrop : MonoBehaviour
     private void HandleReciever(GameObject reciever)
     {
         reciever.GetComponent<Monster>().SetInstrument(type);
-        reciever.GetComponent<Monster>().GetInstrument().sprite = _renderer.sprite;
+        //reciever.GetComponent<Monster>().GetInstrument().sprite = _renderer.sprite;
     }
 
     private void CanPlay()
