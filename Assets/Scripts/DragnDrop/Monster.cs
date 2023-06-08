@@ -164,6 +164,7 @@ public class Monster : MonoBehaviour
         _animator.SetBool("playBass", false);
         _animator.SetBool("playGuitar", false);
         _animator.SetBool("playDrums", false);
+        _animator.SetBool("playKeytar", false);
         
         switch (_instHold){
             case DragAndDrop.Type.Bass:
@@ -177,6 +178,8 @@ public class Monster : MonoBehaviour
                 break;
             case DragAndDrop.Type.Keytar:
             case DragAndDrop.Type.KeytarGrid:
+                _animator.SetBool("playKeytar", true);
+                break;
             case DragAndDrop.Type.Null:
             default:
                 break;
