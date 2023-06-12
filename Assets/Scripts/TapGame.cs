@@ -16,13 +16,14 @@ public class TapGame : MonoBehaviour
     [SerializeField] private Collider2D[] tiles;
     [SerializeField] private AudioClip feedbackClip;
     [SerializeField] private AudioClip missedNoteClip;
+    [SerializeField][Range(0, 10)] private int cheerThreshold;
     [SerializeField] [Range(0.0f, 10.0f)] private int feedback;
     private List<TapInfo> _pendingColliders = new ();
     private AudioSource _source;
 
     private float _bpmInSeconds = 0;
     private int _score = 0;
-    private int _startTiles = 10;
+    private int _tileAmount;
     private bool _canPlay = false;
     
     private double _nextTime;
@@ -33,20 +34,18 @@ public class TapGame : MonoBehaviour
         ButtonManager.OnStop += StopMusic;
         _source = GetComponent<AudioSource>();
     }
-
     private void OnDisable()
     {
         ButtonManager.OnPlay -= StartMusic;
         ButtonManager.OnStop -= StopMusic;
     }
-
     private void Update()
     {
         if (_canPlay)
         {
             if (AudioSettings.dspTime >= _nextTime)
             {
-                _nextTime += _bpmInSeconds * 4;
+                _nextTime += _bpmInSeconds*4;
                 SetMonster();
             }
         }
@@ -65,7 +64,6 @@ public class TapGame : MonoBehaviour
             }
         }
     }
-
     private void SetMonster()
     {
         if (_pendingColliders.Count > 2) return;
@@ -80,18 +78,14 @@ public class TapGame : MonoBehaviour
 
         GameObject note = Instantiate(notePrefab, monster.transform.position + new Vector3(0, 7, -2), Quaternion.identity);
         GameObject outline = null;
-        if (_startTiles > 0)
-        {
-            outline = Instantiate(outlinePrefab, monster.transform.position + (Vector3.forward * -2.1f), Quaternion.identity);
-            _startTiles--;
-        }
+        outline = Instantiate(outlinePrefab, monster.transform.position + (Vector3.forward * -0.5f), Quaternion.identity);
 
         TapInfo info = ScriptableObject.CreateInstance<TapInfo>();
         info.Instantiate(monster, _nextTime, note, outline);
 
         _pendingColliders.Add(info);
+        _tileAmount++;
     }
-
     private void TapMonster()
     {
         if (!Input.GetMouseButtonDown(0) || _pendingColliders.Count <= 0) return;
@@ -114,15 +108,13 @@ public class TapGame : MonoBehaviour
             }
         }
     }
-
     public void StartMusic()
     {
         _bpmInSeconds = 60.0f / SoundManager.instance.bpm;
         _nextTime = AudioSettings.dspTime;
         _canPlay = true;
-        _startTiles = 3;
+        _tileAmount = 0;
     }
-
     public void StopMusic()
     {
         _canPlay = false;
@@ -133,8 +125,11 @@ public class TapGame : MonoBehaviour
             Destroy(info);
         }
         _pendingColliders.Clear();
-    }
 
+        Debug.Log($"{_score} / {_tileAmount} = {_score / _tileAmount} > {cheerThreshold}; {_score / _tileAmount > cheerThreshold}");
+        if (_score / _tileAmount > cheerThreshold)
+            Debug.Log("GOOD SCORE");
+    }
     private bool InPending(Collider2D collider)
     {
         foreach (TapInfo info in _pendingColliders)
@@ -160,6 +155,8 @@ class TapInfo : ScriptableObject
     public GameObject note;
     public GameObject outline;
     public Vector3 startPos;
+    private Vector3 _outlineSize;
+    private SpriteRenderer _renderer;
     private float _t = 0;
     private bool _moveUp = true;
     public bool toDelete;
@@ -170,28 +167,34 @@ class TapInfo : ScriptableObject
         note = pNote;
         startPos = pNote.gameObject.transform.position;
         outline = pOutLine;
+        if (outline == null) Debug.LogError("No outline found for TapInfo!!");
+        _outlineSize = outline.transform.localScale;
+        _renderer = outline.GetComponent<SpriteRenderer>();
     }
 
     public void LerpPos(float speed = 0.05f)
     {
+        //Lerp of note position:
         if (_moveUp)
         {
             _t += speed;
             var position = collider.gameObject.transform.position;
             note.transform.position = Vector3.Lerp(startPos, new Vector3(position.x, position.y, -2), _t);
-            Debug.Log(_t > 1);
             if (_t > 1) _moveUp = false;
+            //Lerp of outline size (and alpha????):
+            outline.transform.localScale = Vector3.Lerp(new Vector3(3,3,0), _outlineSize, _t);
+            _renderer.color = new Color(1, 1, 1, _t);
+            //
         }
         else
         {
             _t -= speed*3;
             if (_t <= 0)
             {
-                Debug.Log("Delete note plz");
                 toDelete = true;
             }
         }
-        Debug.Log(_t);
+        
     }
 
     public int GetScore()

@@ -27,7 +27,6 @@ public class MusicGrid : MonoBehaviour
         {
             Debug.LogError("More then one musicGrid");
             return;
-
         }
         instance = this;
         ActivateGrid(false);
