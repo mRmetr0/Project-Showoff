@@ -13,6 +13,9 @@ public class DragAndDrop : MonoBehaviour
         Guitar,
         Keytar,
         KeytarGrid,
+        GuitarGrid,
+        BassGrid,
+        DrumGrid,
         Null
     }
 
@@ -66,29 +69,26 @@ public class DragAndDrop : MonoBehaviour
                     HandleReciever(hit.gameObject);
                 }
                 
-                if (type == Type.KeytarGrid)
-                    MusicGrid.instance.ActivateGrid(true);
+                if (type == Type.KeytarGrid || type == Type.GuitarGrid || type == Type.DrumGrid || type == Type.BassGrid)
+                    MusicGrid.instance.GridOn(type);
             }
         }
         _dragging = false;
-        transform.position = transform.parent.position + _basePos + Vector3.forward*-0.1f; //_basePos;
+        transform.position = transform.parent.position + _basePos + Vector3.forward*-0.1f;
     
     }
 
     private void HandleReciever(GameObject reciever)
     {
         reciever.GetComponent<Monster>().SetInstrument(type);
-        //reciever.GetComponent<Monster>().GetInstrument().sprite = _renderer.sprite;
     }
 
     private void CanPlay()
     {
         _usable = true;
-        //_renderer.color = Color.white;
     }
     private void CannotPlay()
     {
         _usable = false;
-        //_renderer.color = Color.gray;
     }
 }

@@ -256,7 +256,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cff27ed9b6c3d6e44a04d2b8360d27d1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  type: 2
+  type: 5
 --- !u!61 &117961611
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -342,14 +342,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 117961609}
-  m_LocalRotation: {x: 0, y: 0, z: -0.59580445, w: 0.8031296}
+  m_LocalRotation: {x: 0, y: 0, z: -0.50460285, w: 0.8633516}
   m_LocalPosition: {x: 0.08, y: -0.23, z: -0.1}
   m_LocalScale: {x: 2, y: 2, z: 2}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 748766284}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: -73.14}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: -60.61}
 --- !u!1 &218285814
 GameObject:
   m_ObjectHideFlags: 0
@@ -365,7 +365,7 @@ GameObject:
   - component: {fileID: 218285815}
   - component: {fileID: 218285820}
   m_Layer: 0
-  m_Name: Reciever (3)
+  m_Name: M1
   m_TagString: Reciever
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -484,6 +484,9 @@ MonoBehaviour:
   guitar: {fileID: 8300000, guid: da63a6cf1f908a74cbdf6fae6d933319, type: 3}
   keytar: {fileID: 8300000, guid: 11e50cb8902effe42b58289f4a320496, type: 3}
   keytarGrid: {fileID: 8300000, guid: 72254bd2cd1a2ec4daea0016076eaafb, type: 3}
+  guitarGrid: {fileID: 0}
+  drumGrid: {fileID: 8300000, guid: 809c8b16bc5738e4c97692bb5af7a9ab, type: 3}
+  bassGrid: {fileID: 0}
 --- !u!61 &218285817
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -575,7 +578,7 @@ Transform:
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!95 &218285820
 Animator:
@@ -629,7 +632,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cff27ed9b6c3d6e44a04d2b8360d27d1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  type: 0
+  type: 7
 --- !u!61 &330462500
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -1900,7 +1903,7 @@ GameObject:
   - component: {fileID: 671723726}
   - component: {fileID: 671723731}
   m_Layer: 0
-  m_Name: Reciever (2)
+  m_Name: M4
   m_TagString: Reciever
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2019,6 +2022,9 @@ MonoBehaviour:
   guitar: {fileID: 8300000, guid: 78172d8e858ad554bb332cec4007c28a, type: 3}
   keytar: {fileID: 8300000, guid: 8f7095497c2652946984f900d390593c, type: 3}
   keytarGrid: {fileID: 8300000, guid: 497ea0a0ac33a5c419e5e3bd11765c64, type: 3}
+  guitarGrid: {fileID: 0}
+  drumGrid: {fileID: 8300000, guid: 9d611d7eacaeb9044bd7dde72b4d70d3, type: 3}
+  bassGrid: {fileID: 0}
 --- !u!61 &671723728
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -2110,7 +2116,7 @@ Transform:
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!95 &671723731
 Animator:
@@ -2333,7 +2339,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &860157811
 Transform:
   m_ObjectHideFlags: 0
@@ -2962,7 +2968,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cff27ed9b6c3d6e44a04d2b8360d27d1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  type: 3
+  type: 4
 --- !u!61 &1494216757
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -3071,7 +3077,7 @@ GameObject:
   - component: {fileID: 1533385205}
   - component: {fileID: 1533385210}
   m_Layer: 0
-  m_Name: Reciever (1)
+  m_Name: M2
   m_TagString: Reciever
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3190,6 +3196,9 @@ MonoBehaviour:
   guitar: {fileID: 8300000, guid: 7a0d08ddcdf7e9a43bc983cf05b3ee50, type: 3}
   keytar: {fileID: 8300000, guid: 00190c0501e292f438f8132e383bf2c8, type: 3}
   keytarGrid: {fileID: 8300000, guid: a3ef05473484e0c428c63c8c1b463ebd, type: 3}
+  guitarGrid: {fileID: 0}
+  drumGrid: {fileID: 8300000, guid: 32c17e297cdd4c648984ea2da93c56c4, type: 3}
+  bassGrid: {fileID: 0}
 --- !u!61 &1533385207
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -3319,7 +3328,7 @@ GameObject:
   - component: {fileID: 1535048928}
   - component: {fileID: 1535048933}
   m_Layer: 0
-  m_Name: Reciever
+  m_Name: M3
   m_TagString: Reciever
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3438,6 +3447,9 @@ MonoBehaviour:
   guitar: {fileID: 8300000, guid: 7a0d08ddcdf7e9a43bc983cf05b3ee50, type: 3}
   keytar: {fileID: 8300000, guid: dbb95358c6e8e8c4595b88048a9c442e, type: 3}
   keytarGrid: {fileID: 8300000, guid: 497ea0a0ac33a5c419e5e3bd11765c64, type: 3}
+  guitarGrid: {fileID: 0}
+  drumGrid: {fileID: 8300000, guid: e945395015cce4c4f9aecf34b0093404, type: 3}
+  bassGrid: {fileID: 0}
 --- !u!61 &1535048930
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -3529,7 +3541,7 @@ Transform:
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 1
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!95 &1535048933
 Animator:
@@ -4018,7 +4030,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!156049354 &2040449020
 Grid:
   m_ObjectHideFlags: 0
@@ -4119,7 +4131,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cff27ed9b6c3d6e44a04d2b8360d27d1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  type: 1
+  type: 6
 --- !u!212 &2079490318
 SpriteRenderer:
   m_ObjectHideFlags: 0

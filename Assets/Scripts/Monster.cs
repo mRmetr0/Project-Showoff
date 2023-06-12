@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Unity.VisualScripting;
 using UnityEditor.Animations;
 using UnityEngine;
@@ -13,8 +14,9 @@ public class Monster : MonoBehaviour
     [SerializeField] private AudioClip bass;
     [SerializeField] private AudioClip guitar;
     [SerializeField] private AudioClip keytar;
-    [SerializeField] private AudioClip keytarGrid;
-    
+    [SerializeField] private AudioClip keytarGrid, guitarGrid, drumGrid, bassGrid;
+
+    private AudioClip instClip;
     private Collider2D _collider;
     private AudioSource _source;
     private DragAndDrop.Type _instHold = DragAndDrop.Type.Null;
@@ -106,6 +108,22 @@ public class Monster : MonoBehaviour
                 break;
             case (DragAndDrop.Type.KeytarGrid):
                 _source.clip = null;
+                instClip = keytarGrid;
+                SetToPlay();
+                break;
+            case (DragAndDrop.Type.DrumGrid):
+                _source.clip = null;
+                instClip = drumGrid;
+                SetToPlay();
+                break;
+            case (DragAndDrop.Type.GuitarGrid):
+                _source.clip = null;
+                instClip = guitarGrid;
+                SetToPlay();
+                break;
+            case (DragAndDrop.Type.BassGrid):
+                _source.clip = null;
+                instClip = bassGrid;
                 SetToPlay();
                 break;
         }
@@ -118,30 +136,34 @@ public class Monster : MonoBehaviour
     private void PlayGrid()
     {
         if (!_canPlay) return;
-        if (AudioSettings.dspTime >= _nextTime)
-        {
-            _nextTime += _bpmInSeconds;
-            _beat++;
+        if (AudioSettings.dspTime < _nextTime) return;
+        _nextTime += _bpmInSeconds;
+        _beat++;
 
-            if (_beat >= _currentNotes.Count) 
-            {
-                _beat = 0;
-            }
-            
-            List<int> notes = _currentNotes[_beat];
-            foreach (int note in notes)
-            {
-                float pitch = Mathf.Pow(2, (_betterKeys[note]+_transpose)/12.0f);
-                playSound(keytarGrid, pitch);
-            }
+        if (_beat >= _currentNotes.Count) 
+        {
+            _beat = 0;
         }
+        
+        List<int> notes = _currentNotes[_beat];
+        foreach (int note in notes)
+        {
+            if (note < _betterKeys.Min() || note > _betterKeys.Max())
+            {
+                Debug.LogError($"NOTE NOT IN KEY LIST. NOTE: {note}");
+                continue;
+            }
+            float pitch = Mathf.Pow(2, (_betterKeys[note]+_transpose)/12.0f);
+            playSound(instClip, pitch);
+        }
+        
     }
     private void SetToPlay()
     {
         _bpmInSeconds = 60.0f / SoundManager.instance.bpm;
         _nextTime = AudioSettings.dspTime;
         _canPlay = true;
-        _currentNotes = MusicGrid.instance.GetNotes();
+        _currentNotes = MusicGrid.instance.GetInstNotes(_instHold);
         _beat = -1;
     }
     private void StopTrack()
@@ -159,12 +181,15 @@ public class Monster : MonoBehaviour
         _animator.SetBool("playKeytar", false);
         
         switch (_instHold){
+            case DragAndDrop.Type.BassGrid:
             case DragAndDrop.Type.Bass:
                 _animator.SetBool("playBass", true);
                 break;
+            case DragAndDrop.Type.GuitarGrid:
             case DragAndDrop.Type.Guitar:
                 _animator.SetBool("playGuitar", true);
                 break;
+            case DragAndDrop.Type.DrumGrid:
             case DragAndDrop.Type.Drums:
                 _animator.SetBool("playDrums", true);
                 break;
