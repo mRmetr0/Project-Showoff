@@ -34,14 +34,14 @@ public class DragAndDrop : MonoBehaviour
 
     private void OnEnable()
     {
-        ButtonManager.OnPlay += CannotPlay;
-        ButtonManager.OnStop += CanPlay;
+        ButtonManager.onPlay += CannotPlay;
+        ButtonManager.onStop += CanPlay;
     }
 
     private void OnDisable()
     {
-        ButtonManager.OnPlay -= CannotPlay;
-        ButtonManager.OnStop -= CanPlay;
+        ButtonManager.onPlay -= CannotPlay;
+        ButtonManager.onStop -= CanPlay;
     }
     
     void Update()
@@ -67,10 +67,10 @@ public class DragAndDrop : MonoBehaviour
                 if (hit.gameObject.tag == "Reciever")
                 {
                     HandleReciever(hit.gameObject);
+                    if (type == Type.KeytarGrid || type == Type.GuitarGrid || type == Type.DrumGrid || type == Type.BassGrid)
+                        MusicGrid.instance.GridOn(hit.GetComponent<Monster>());
                 }
                 
-                if (type == Type.KeytarGrid || type == Type.GuitarGrid || type == Type.DrumGrid || type == Type.BassGrid)
-                    MusicGrid.instance.GridOn(type);
             }
         }
         _dragging = false;

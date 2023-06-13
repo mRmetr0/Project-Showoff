@@ -16,23 +16,20 @@ public class Monster : MonoBehaviour
     [SerializeField] private AudioClip keytar;
     [SerializeField] private AudioClip keytarGrid, guitarGrid, drumGrid, bassGrid;
 
-    private AudioClip instClip;
+    private AudioClip _instClip;
     private Collider2D _collider;
     private AudioSource _source;
     private DragAndDrop.Type _instHold = DragAndDrop.Type.Null;
     private Animator _animator;
 
-    private Dictionary<int, List<int>> _currentNotes;
-    private float _bpmInSeconds = 0;
     private int _beat = -1;
     private bool _canPlay = false;
     private bool _clickable = true;
     
-    private double _nextTime;
-
     private readonly float _transpose = 5;
-
     private float[] _betterKeys = { 0, 2, 4, 5, 7, 9, 11, 12}; //White key, includes second octave
+
+    public bool[][] Notes { get; set; }
 
     private void Awake()
     {
@@ -44,14 +41,16 @@ public class Monster : MonoBehaviour
 
     private void OnEnable()
     {
-        ButtonManager.OnPlay += StartTrack;
-        ButtonManager.OnStop += StopTrack;
+        SoundManager.onBeat += PlayBeat;
+        ButtonManager.onPlay += StartTrack;
+        ButtonManager.onStop += StopTrack;
     }
 
     private void OnDisable()
     {
-        ButtonManager.OnPlay -= StartTrack;
-        ButtonManager.OnStop -= StopTrack;
+        SoundManager.onBeat -= PlayBeat;
+        ButtonManager.onPlay -= StartTrack;
+        ButtonManager.onStop -= StopTrack;
     }
 
     private void Update()
@@ -61,8 +60,6 @@ public class Monster : MonoBehaviour
         {
             Reset();
         }
-        
-        PlayGrid();
     }
 
     private void playSound(AudioClip pClip, float pPitch, float pVolume = 1.0f)
@@ -108,62 +105,59 @@ public class Monster : MonoBehaviour
                 break;
             case (DragAndDrop.Type.KeytarGrid):
                 _source.clip = null;
-                instClip = keytarGrid;
+                _instClip = keytarGrid;
                 SetToPlay();
                 break;
             case (DragAndDrop.Type.DrumGrid):
                 _source.clip = null;
-                instClip = drumGrid;
+                _instClip = drumGrid;
                 SetToPlay();
                 break;
             case (DragAndDrop.Type.GuitarGrid):
                 _source.clip = null;
-                instClip = guitarGrid;
+                _instClip = guitarGrid;
                 SetToPlay();
                 break;
             case (DragAndDrop.Type.BassGrid):
                 _source.clip = null;
-                instClip = bassGrid;
+                _instClip = bassGrid;
                 SetToPlay();
                 break;
         }
-        if (_source.clip != null)
-            _source.Play();
+        if (_source.clip != null) //TODO: make audio track sync with first beat;
+            _source.Play(); 
 
         _clickable = false;
     }
 
-    private void PlayGrid()
+    private void PlayBeat()
     {
         if (!_canPlay) return;
-        if (AudioSettings.dspTime < _nextTime) return;
-        _nextTime += _bpmInSeconds;
         _beat++;
-
-        if (_beat >= _currentNotes.Count) 
-        {
+        if (_beat >= Notes.Length)
             _beat = 0;
-        }
-        
-        List<int> notes = _currentNotes[_beat];
-        foreach (int note in notes)
+        for (int i = 0; i < Notes.Length; i++)
         {
-            if (note < _betterKeys.Min() || note > _betterKeys.Max())
+            bool note = Notes[_beat][i];
+            if (note)
             {
-                Debug.LogError($"NOTE NOT IN KEY LIST. NOTE: {note}");
-                continue;
+                if (i < _betterKeys.Min() || i > _betterKeys.Max())
+                {
+                    Debug.LogError($"NOTE NOT IN KEY LIST. NOTE: {i}");
+                }
+                else
+                {
+                    float pitch = Mathf.Pow(2, (_betterKeys[i]+_transpose)/12.0f);
+                    playSound(_instClip, pitch);
+                    Debug.Log("Should play sound");
+                }
             }
-            float pitch = Mathf.Pow(2, (_betterKeys[note]+_transpose)/12.0f);
-            playSound(instClip, pitch);
         }
-        
     }
+
     private void SetToPlay()
     {
-        _bpmInSeconds = 60.0f / SoundManager.instance.bpm;
-        _nextTime = AudioSettings.dspTime;
         _canPlay = true;
-        _currentNotes = MusicGrid.instance.GetInstNotes(_instHold);
         _beat = -1;
     }
     private void StopTrack()

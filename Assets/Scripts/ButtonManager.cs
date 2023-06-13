@@ -13,8 +13,8 @@ public class ButtonManager : MonoBehaviour
    private Image _image;
    private bool _playing = false;
 
-   public static Action OnPlay;
-   public static Action OnStop;
+   public static Action onPlay;
+   public static Action onStop;
 
    private void Awake ()
    {
@@ -31,12 +31,12 @@ public class ButtonManager : MonoBehaviour
    {
       if (_playing)
       {
-         OnStop?.Invoke();
+         onStop?.Invoke();
          _image.sprite = startSprite;
       }
       else
       {
-         OnPlay?.Invoke();
+         onPlay?.Invoke();
          _image.sprite = stopSprite;
       }
       _playing = !_playing;

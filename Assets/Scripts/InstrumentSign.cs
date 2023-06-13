@@ -19,14 +19,14 @@ public class InstrumentSign : MonoBehaviour
 
     private void OnEnable()
     {
-        ButtonManager.OnPlay += Hide;
-        ButtonManager.OnStop += Show;
+        ButtonManager.onPlay += Hide;
+        ButtonManager.onStop += Show;
     }
 
     private void OnDisable()
     {
-        ButtonManager.OnPlay -= Hide;
-        ButtonManager.OnStop -= Show;
+        ButtonManager.onPlay -= Hide;
+        ButtonManager.onStop -= Show;
     }
 
     private void Update()

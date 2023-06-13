@@ -30,14 +30,14 @@ public class TapGame : MonoBehaviour
     
     private void OnEnable() 
     {
-        ButtonManager.OnPlay += StartMusic;
-        ButtonManager.OnStop += StopMusic;
+        ButtonManager.onPlay += StartMusic;
+        ButtonManager.onStop += StopMusic;
         _source = GetComponent<AudioSource>();
     }
     private void OnDisable()
     {
-        ButtonManager.OnPlay -= StartMusic;
-        ButtonManager.OnStop -= StopMusic;
+        ButtonManager.onPlay -= StartMusic;
+        ButtonManager.onStop -= StopMusic;
     }
     private void Update()
     {

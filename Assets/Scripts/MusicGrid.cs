@@ -10,9 +10,8 @@ public class MusicGrid : MonoBehaviour
     [SerializeField] private Tile selected;
     [SerializeField] private Tile empty;
 
-    private DragAndDrop.Type _inst = DragAndDrop.Type.Null;
-    private Dictionary<DragAndDrop.Type, Dictionary<int, List<int>>> _instGrids = new ();
-    private Dictionary<int, List<int>> _currentNotes;
+    private Monster _monster;
+    
     private bool _interactable;
 
     public bool Interactable => _interactable;
@@ -53,38 +52,36 @@ public class MusicGrid : MonoBehaviour
         }
     }
 
-    public Dictionary<int, List<int>> GetNotes()
+    public bool[][] GetNotes()
     {
         BoundsInt bounds = tilemap.cellBounds;
-        Dictionary<int, List<int>> notes = new Dictionary<int, List<int>>();
+        bool[][] notes = new bool [8][];
+        for (int i = notes.Length-1; i >=0; i--)
+        {
+            notes[i] = new bool[8];
+        }
+
         for (int x = bounds.min.x; x < bounds.max.x; x++)
         {
-            List<int> beatNotes = new List<int>();
             for (int y = bounds.min.y; y < bounds.max.y; y++)
             {
                 Tile tile = tilemap.GetTile(new Vector3Int(x, y, 0)) as Tile;
-                if (tile == selected)
-                {
-                    beatNotes.Add(y);
-                }
+                notes[x][y] = (tile == selected);
+                //Debug.Log($"x:{x} y: {y} bool: {tile == selected}");
             }
-            notes.Add(x, beatNotes);
         }
         return notes;
     }
 
-    public void SetNotes()
+    public void SetNotes(bool [][] pNotes)
     {
         BoundsInt bounds = tilemap.cellBounds;
-        Dictionary<int, List<int>> notes = _instGrids[_inst];
         for (int x = bounds.min.x; x < bounds.max.x; x++)
         {
-            List<int> beatNotes = notes[x];
-            if (beatNotes.Count == 0) continue;
             for (int y = bounds.min.y; y < bounds.max.y; y++)
             {
-                if (!beatNotes.Contains(y)) continue;
-                tilemap.SetTile(new Vector3Int(x, y, 0), selected);
+                Tile tile = pNotes[x][y] ? selected : empty;
+                tilemap.SetTile(new Vector3Int(x, y, 0), tile);
             }
         }
     }
@@ -101,17 +98,12 @@ public class MusicGrid : MonoBehaviour
         }
     }
 
-    public void GridOn(DragAndDrop.Type pInst)
+    public void GridOn(Monster pMonster)
     {
-        if (pInst == DragAndDrop.Type.Null)
-        {
-            Debug.LogError("Recieved NULL instrument!");
-            return;
-        }
+        _monster = pMonster;
+        if (pMonster.Notes == null) SetClearGrid();
+        else SetNotes(pMonster.Notes);
 
-        _inst = pInst;
-        if (!_instGrids.ContainsKey(pInst)) SetClearGrid();
-        else SetNotes();
         
         ActivateGrid(true);
     }
@@ -119,11 +111,8 @@ public class MusicGrid : MonoBehaviour
     public void GridOff()
     {
         ActivateGrid(false);
-        if (_inst == DragAndDrop.Type.Null) return;
-        if (_instGrids.ContainsKey(_inst))
-            _instGrids[_inst] = GetNotes();
-        else
-            _instGrids.Add(_inst, GetNotes());
+        if (_monster != null)
+            _monster.Notes = GetNotes();
         SetClearGrid();
     }
 
@@ -131,13 +120,5 @@ public class MusicGrid : MonoBehaviour
     {
         grid.gameObject.SetActive(active);
         _interactable = active;
-    }
-
-    public Dictionary<int, List<int>> GetInstNotes(DragAndDrop.Type pInst)
-    {
-        if (_instGrids.ContainsKey(pInst))
-            return _instGrids[pInst];
-        Debug.LogError("Grid was requested that did not exist!");
-        return null;
     }
 }
