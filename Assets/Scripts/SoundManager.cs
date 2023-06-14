@@ -24,6 +24,5 @@ public class SoundManager : MonoBehaviour
     private void HitBeat()
     {
         onBeat?.Invoke();
-        Debug.Log("BEAT");
     }
 }

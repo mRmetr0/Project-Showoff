@@ -7,11 +7,12 @@ public class MusicGrid : MonoBehaviour
     public static MusicGrid instance;
     [SerializeField] private Grid grid;
     [SerializeField] private Tilemap tilemap;
-    [SerializeField] private Tile selected;
-    [SerializeField] private Tile empty;
+    [SerializeField] private RuleTile selected;
+    [SerializeField] private RuleTile empty;
 
     private Monster _monster;
-    
+
+    private RuleTile ToDraw;
     private bool _interactable;
 
     public bool Interactable => _interactable;
@@ -35,10 +36,11 @@ public class MusicGrid : MonoBehaviour
 
     private void ClickGrid()
     {
-        if (Input.GetMouseButtonDown(0) && _interactable)
+        if (!_interactable) return;
+        if (Input.GetMouseButtonDown(0))
         {
             Vector3Int mousePos = grid.WorldToCell(Camera.main.ScreenToWorldPoint(Input.mousePosition));
-            Tile tile = tilemap.GetTile(mousePos) as Tile;
+            RuleTile tile = tilemap.GetTile(mousePos) as RuleTile;
             if (tile == null)
             {
                 //ActivateGrid(false);
@@ -46,9 +48,19 @@ public class MusicGrid : MonoBehaviour
                 return;
             }
             if (tile == selected)
-                tilemap.SetTile(mousePos, empty);
+                ToDraw = empty;
             else
-                tilemap.SetTile(mousePos, selected);
+                ToDraw = selected;
+        }
+
+        if (Input.GetMouseButton(0))
+        {
+            Vector3Int mousePos = grid.WorldToCell(Camera.main.ScreenToWorldPoint(Input.mousePosition));
+            RuleTile tile = tilemap.GetTile(mousePos) as RuleTile;
+            if (tile == null) return;
+            tilemap.SetTile(mousePos, ToDraw);
+            if (ToDraw != selected) return;
+            _monster.PlayKeySound(mousePos.y);
         }
     }
 
@@ -65,9 +77,8 @@ public class MusicGrid : MonoBehaviour
         {
             for (int y = bounds.min.y; y < bounds.max.y; y++)
             {
-                Tile tile = tilemap.GetTile(new Vector3Int(x, y, 0)) as Tile;
+                RuleTile tile = tilemap.GetTile(new Vector3Int(x, y, 0)) as RuleTile;
                 notes[x][y] = (tile == selected);
-                //Debug.Log($"x:{x} y: {y} bool: {tile == selected}");
             }
         }
         return notes;
@@ -80,7 +91,7 @@ public class MusicGrid : MonoBehaviour
         {
             for (int y = bounds.min.y; y < bounds.max.y; y++)
             {
-                Tile tile = pNotes[x][y] ? selected : empty;
+                RuleTile tile = pNotes[x][y] ? selected : empty;
                 tilemap.SetTile(new Vector3Int(x, y, 0), tile);
             }
         }

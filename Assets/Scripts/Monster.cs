@@ -6,7 +6,7 @@ using Unity.VisualScripting;
 using UnityEditor.Animations;
 using UnityEngine;
 
-[RequireComponent(typeof(AudioSource))][RequireComponent(typeof(AnimatorController))]
+[RequireComponent(typeof(AnimatorController))]
 public class Monster : MonoBehaviour
 {
     [Space(5)][Header ("Instrument AudioClips:")]
@@ -19,14 +19,16 @@ public class Monster : MonoBehaviour
     private AudioClip _instClip;
     private Collider2D _collider;
     private AudioSource _source;
+    private AudioSource[] _keySources;
     private DragAndDrop.Type _instHold = DragAndDrop.Type.Null;
     private Animator _animator;
 
     private int _beat = -1;
     private bool _canPlay = false;
     private bool _clickable = true;
+    private bool _grabbing;
     
-    private readonly float _transpose = 5;
+    private readonly float _transpose = 0;
     private float[] _betterKeys = { 0, 2, 4, 5, 7, 9, 11, 12}; //White key, includes second octave
 
     public bool[][] Notes { get; set; }
@@ -34,9 +36,10 @@ public class Monster : MonoBehaviour
     private void Awake()
     {
         _collider = GetComponent<Collider2D>();
-        _source = GetComponent<AudioSource>();
         _animator = GetComponent<Animator>();
+        _source = GetComponent<AudioSource>();
         _source.loop = true;
+        SetKeySources();
     }
 
     private void OnEnable()
@@ -44,6 +47,7 @@ public class Monster : MonoBehaviour
         SoundManager.onBeat += PlayBeat;
         ButtonManager.onPlay += StartTrack;
         ButtonManager.onStop += StopTrack;
+        DragAndDrop.onDragging += CalculateDistance;
     }
 
     private void OnDisable()
@@ -51,6 +55,7 @@ public class Monster : MonoBehaviour
         SoundManager.onBeat -= PlayBeat;
         ButtonManager.onPlay -= StartTrack;
         ButtonManager.onStop -= StopTrack;
+        DragAndDrop.onDragging -= CalculateDistance;
     }
 
     private void Update()
@@ -62,16 +67,23 @@ public class Monster : MonoBehaviour
         }
     }
 
-    private void playSound(AudioClip pClip, float pPitch, float pVolume = 1.0f)
+    private void SetKeySources()
     {
-        AudioSource soundSource = this.AddComponent<AudioSource>();
-        soundSource.pitch = pPitch;
-        soundSource.volume = pVolume;
-        soundSource.clip = pClip;
-        soundSource.Play();
-        Destroy(soundSource, pClip.length);
+        _keySources = new AudioSource[_betterKeys.Length];
+        for (int i = 0; i < _betterKeys.Length; i++)
+        {
+            AudioSource source = this.AddComponent<AudioSource>();
+            source.pitch = Mathf.Pow(2, (_betterKeys[i] + _transpose) / 12.0f);
+            _keySources[i] = source;
+        }
     }
-    
+
+    public void PlayKeySound(int key)
+    {
+        AudioSource source = _keySources[key];
+        source.PlayOneShot(_instClip);
+    }
+
     private void Reset()
     {
         StopTrack();
@@ -84,11 +96,24 @@ public class Monster : MonoBehaviour
     public void SetInstrument(DragAndDrop.Type inst)
     {
         _instHold = inst;
+        SetInstClip();
         SetAnimation();
     }
 
     private void StartTrack()
     {
+        if (_source.clip != null) //TODO: make audio track sync with first beat;
+            _source.Play(); 
+        if (_instClip != null)
+            SetToPlay();
+
+        _clickable = false;
+    }
+
+    private void SetInstClip()
+    {
+        _source.clip = null;
+        _instClip = null;
         switch (_instHold)
         {
             case(DragAndDrop.Type.Drums):
@@ -104,30 +129,18 @@ public class Monster : MonoBehaviour
                 _source.clip = keytar;
                 break;
             case (DragAndDrop.Type.KeytarGrid):
-                _source.clip = null;
                 _instClip = keytarGrid;
-                SetToPlay();
                 break;
             case (DragAndDrop.Type.DrumGrid):
-                _source.clip = null;
                 _instClip = drumGrid;
-                SetToPlay();
                 break;
             case (DragAndDrop.Type.GuitarGrid):
-                _source.clip = null;
                 _instClip = guitarGrid;
-                SetToPlay();
                 break;
             case (DragAndDrop.Type.BassGrid):
-                _source.clip = null;
                 _instClip = bassGrid;
-                SetToPlay();
                 break;
         }
-        if (_source.clip != null) //TODO: make audio track sync with first beat;
-            _source.Play(); 
-
-        _clickable = false;
     }
 
     private void PlayBeat()
@@ -147,9 +160,7 @@ public class Monster : MonoBehaviour
                 }
                 else
                 {
-                    float pitch = Mathf.Pow(2, (_betterKeys[i]+_transpose)/12.0f);
-                    playSound(_instClip, pitch);
-                    Debug.Log("Should play sound");
+                    PlayKeySound(i);
                 }
             }
         }
@@ -169,31 +180,41 @@ public class Monster : MonoBehaviour
 
     private void SetAnimation()
     {
-        _animator.SetBool("playBass", false);
-        _animator.SetBool("playGuitar", false);
-        _animator.SetBool("playDrums", false);
-        _animator.SetBool("playKeytar", false);
+        _animator.SetBool("grabbing", false);
         
         switch (_instHold){
             case DragAndDrop.Type.BassGrid:
             case DragAndDrop.Type.Bass:
-                _animator.SetBool("playBass", true);
+                _animator.SetTrigger("bass");
                 break;
             case DragAndDrop.Type.GuitarGrid:
             case DragAndDrop.Type.Guitar:
-                _animator.SetBool("playGuitar", true);
+                _animator.SetTrigger("guitar");
                 break;
             case DragAndDrop.Type.DrumGrid:
             case DragAndDrop.Type.Drums:
-                _animator.SetBool("playDrums", true);
+                _animator.SetTrigger("drums");
                 break;
             case DragAndDrop.Type.Keytar:
             case DragAndDrop.Type.KeytarGrid:
-                _animator.SetBool("playKeytar", true);
+                _animator.SetTrigger("keytar");
                 break;
             case DragAndDrop.Type.Null:
-            default:
+                _animator.SetTrigger("idle");
                 break;
+        }
+    }
+
+    private void CalculateDistance(Vector2 mousePos)
+    {
+        if ((new Vector2(transform.position.x, transform.position.y) - mousePos).magnitude < 1 && !_grabbing)
+        {
+            _grabbing = true;
+            _animator.SetBool("grabbing", true);
+        } else if ((new Vector2(transform.position.x, transform.position.y) - mousePos).magnitude > 1 && _grabbing)
+        {
+            _grabbing = false;
+            _animator.SetBool("grabbing", false);
         }
     }
 }

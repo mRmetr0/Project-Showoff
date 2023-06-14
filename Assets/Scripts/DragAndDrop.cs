@@ -1,10 +1,11 @@
-using System.Collections;
-using System.Collections.Generic;
+using System;
 using UnityEngine;
 
 [RequireComponent(typeof(Collider2D))]
 public class DragAndDrop : MonoBehaviour
 {
+    public static Action<Vector2> onDragging; 
+    
     public Type type;
     public enum Type
     {
@@ -18,8 +19,6 @@ public class DragAndDrop : MonoBehaviour
         DrumGrid,
         Null
     }
-
-    private SpriteRenderer _renderer;
     private Collider2D _collider;
     private Vector3 _basePos;
     private bool _dragging = false;
@@ -29,7 +28,6 @@ public class DragAndDrop : MonoBehaviour
     {
         _basePos = transform.localPosition;
         _collider = GetComponent<Collider2D>();
-        _renderer = GetComponent<SpriteRenderer>();
     }
 
     private void OnEnable()
@@ -56,7 +54,11 @@ public class DragAndDrop : MonoBehaviour
         }
 
         if (_dragging)
+        {
             this.transform.position = new Vector3(mousePos.x, mousePos.y, transform.position.z);
+            onDragging?.Invoke(new Vector2(mousePos.x, mousePos.y));
+        }
+
 
         if (!Input.GetMouseButtonUp(0)) return;
         if (_dragging)
@@ -75,7 +77,6 @@ public class DragAndDrop : MonoBehaviour
         }
         _dragging = false;
         transform.position = transform.parent.position + _basePos + Vector3.forward*-0.1f;
-    
     }
 
     private void HandleReciever(GameObject reciever)
