@@ -16,14 +16,14 @@ public class ButtonManager : MonoBehaviour
    public static Action onPlay;
    public static Action onStop;
 
-   private void Awake ()
+   private void Awake()
    {
       if (instance == null)
       {
          instance = this;
          _image = playButton.GetComponent<Image>();
       }
-      else 
+      else
          Debug.LogError("Found two button managers in one scene!");
    }
 
@@ -39,6 +39,22 @@ public class ButtonManager : MonoBehaviour
          onPlay?.Invoke();
          _image.sprite = stopSprite;
       }
+
       _playing = !_playing;
+   }
+
+   public void SetButtonActive(bool active)
+   {
+      if (!active)
+      {
+         foreach (Monster monster in Monster.monsters)
+         {
+            if (monster.InstHold != DragAndDrop.Type.Null) 
+               return;
+         }
+      }
+
+      playButton.interactable = active;
+      playButton.gameObject.SetActive(active);
    }
 }

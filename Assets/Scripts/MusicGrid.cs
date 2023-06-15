@@ -59,8 +59,8 @@ public class MusicGrid : MonoBehaviour
             RuleTile tile = tilemap.GetTile(mousePos) as RuleTile;
             if (tile == null) return;
             tilemap.SetTile(mousePos, ToDraw);
-            if (ToDraw != selected) return;
-            _monster.PlayKeySound(mousePos.y);
+            // if (ToDraw != selected) return;
+            // _monster.PlayKeySound(mousePos.y);
         }
     }
 
@@ -104,7 +104,9 @@ public class MusicGrid : MonoBehaviour
         {
             for (int y = bounds.min.y; y < bounds.max.y; y++)
             {
-                tilemap.SetTile(new Vector3Int(x, y, 0), empty);
+                RuleTile tile = tilemap.GetTile(new Vector3Int(x, y, 0)) as RuleTile;
+                if (tile != null)
+                    tilemap.SetTile(new Vector3Int(x, y, 0), empty);
             }
         }
     }

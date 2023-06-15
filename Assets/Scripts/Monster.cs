@@ -1,9 +1,9 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Unity.VisualScripting;
 using UnityEditor.Animations;
+using UnityEditor.PackageManager;
 using UnityEngine;
 
 [RequireComponent(typeof(AnimatorController))]
@@ -31,7 +31,9 @@ public class Monster : MonoBehaviour
     private readonly float _transpose = 0;
     private float[] _betterKeys = { 0, 2, 4, 5, 7, 9, 11, 12}; //White key, includes second octave
 
+    public static List<Monster> monsters;
     public bool[][] Notes { get; set; }
+    public DragAndDrop.Type InstHold => _instHold;
 
     private void Awake()
     {
@@ -40,6 +42,13 @@ public class Monster : MonoBehaviour
         _source = GetComponent<AudioSource>();
         _source.loop = true;
         SetKeySources();
+    }
+
+    private void Start()
+    {
+        if (monsters == null)
+            monsters = new List<Monster>();
+        monsters.Add(this);
     }
 
     private void OnEnable()
@@ -91,6 +100,7 @@ public class Monster : MonoBehaviour
         _instHold = DragAndDrop.Type.Null;
         _canPlay = false;
         SetAnimation();
+        ButtonManager.instance.SetButtonActive(false);
     }
     
     public void SetInstrument(DragAndDrop.Type inst)
@@ -110,6 +120,7 @@ public class Monster : MonoBehaviour
         _clickable = false;
     }
 
+    // ReSharper disable Unity.PerformanceAnalysis
     private void SetInstClip()
     {
         _source.clip = null;
@@ -140,9 +151,15 @@ public class Monster : MonoBehaviour
             case (DragAndDrop.Type.BassGrid):
                 _instClip = bassGrid;
                 break;
+            case (DragAndDrop.Type.Null):
+                break;
+            default:
+                Debug.LogError("Incorrect type given.");
+                break;
         }
     }
 
+    // ReSharper disable Unity.PerformanceAnalysis
     private void PlayBeat()
     {
         if (!_canPlay) return;
@@ -201,6 +218,9 @@ public class Monster : MonoBehaviour
                 break;
             case DragAndDrop.Type.Null:
                 _animator.SetTrigger("idle");
+                break;
+            default:
+
                 break;
         }
     }

@@ -82,6 +82,7 @@ public class DragAndDrop : MonoBehaviour
     private void HandleReciever(GameObject reciever)
     {
         reciever.GetComponent<Monster>().SetInstrument(type);
+        ButtonManager.instance.SetButtonActive(true);
     }
 
     private void CanPlay()
