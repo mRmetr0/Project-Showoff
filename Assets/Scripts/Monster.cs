@@ -96,10 +96,9 @@ public class Monster : MonoBehaviour
     private void Reset()
     {
         StopTrack();
+        SetInstrument(DragAndDrop.Type.Null);
         _source.clip = null;
-        _instHold = DragAndDrop.Type.Null;
         _canPlay = false;
-        SetAnimation();
         ButtonManager.instance.SetButtonActive(false);
     }
     
@@ -162,6 +161,7 @@ public class Monster : MonoBehaviour
     // ReSharper disable Unity.PerformanceAnalysis
     private void PlayBeat()
     {
+        if (_instClip == null) return;
         if (!_canPlay) return;
         _beat++;
         if (_beat >= Notes.Length)
