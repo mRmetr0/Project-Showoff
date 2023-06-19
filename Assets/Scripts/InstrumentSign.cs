@@ -1,7 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class InstrumentSign : MonoBehaviour
@@ -9,12 +5,14 @@ public class InstrumentSign : MonoBehaviour
     [SerializeField] private float moveSpeed;
     
     private Vector3 _showPos, _hidePos, startPos, endPos;
+    private DragAndDrop inst;
     private float _t;
     private bool _shouldMove;
     private void Awake()
     {
         _showPos = transform.position;
         _hidePos = _showPos + (Vector3.up * transform.localScale.y * 5f);
+        inst = GetComponentInChildren<DragAndDrop>();
     }
 
     private void OnEnable()
@@ -41,12 +39,14 @@ public class InstrumentSign : MonoBehaviour
 
     private void Hide()
     {
+        inst.Usable = false;
         startPos = _showPos;
         endPos = _hidePos;
         GeneralSetup();
     }
     private void Show()
     {
+        inst.Usable = true;
         startPos = _hidePos;
         endPos = _showPos;
         GeneralSetup();

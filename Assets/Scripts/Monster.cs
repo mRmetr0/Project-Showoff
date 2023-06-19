@@ -220,18 +220,18 @@ public class Monster : MonoBehaviour
                 _animator.SetTrigger("idle");
                 break;
             default:
-
+                Debug.LogError("INVALID TYPE GIVEN");
                 break;
         }
     }
 
     private void CalculateDistance(Vector2 mousePos)
     {
-        if ((new Vector2(transform.position.x, transform.position.y) - mousePos).magnitude < 1 && !_grabbing)
+        if ((new Vector2(transform.position.x, transform.position.y) - mousePos).magnitude < 2 && !_grabbing)
         {
             _grabbing = true;
             _animator.SetBool("grabbing", true);
-        } else if ((new Vector2(transform.position.x, transform.position.y) - mousePos).magnitude > 1 && _grabbing)
+        } else if ((new Vector2(transform.position.x, transform.position.y) - mousePos).magnitude > 2 && _grabbing)
         {
             _grabbing = false;
             _animator.SetBool("grabbing", false);

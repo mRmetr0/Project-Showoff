@@ -43,9 +43,9 @@ public class ButtonManager : MonoBehaviour
       _playing = !_playing;
    }
 
-   public void SetButtonActive(bool active)
+   public void SetButtonActive(bool active, bool force = false)
    {
-      if (!active)
+      if (!active && !force)
       {
          foreach (Monster monster in Monster.monsters)
          {

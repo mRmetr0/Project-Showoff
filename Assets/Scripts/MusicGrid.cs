@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
@@ -5,10 +6,12 @@ using UnityEngine.Tilemaps;
 public class MusicGrid : MonoBehaviour
 {
     public static MusicGrid instance;
+    public static Action<bool> onActivate;
     [SerializeField] private Grid grid;
     [SerializeField] private Tilemap tilemap;
     [SerializeField] private RuleTile selected;
     [SerializeField] private RuleTile empty;
+    [SerializeField] private RuleTile exit;
 
     private Monster _monster;
 
@@ -26,7 +29,12 @@ public class MusicGrid : MonoBehaviour
         }
         instance = this;
         tilemap.CompressBounds();
-        GridOff();
+    }
+
+    private void Start()
+    {
+        ActivateGrid(false);
+        SetClearGrid();
     }
 
     private void Update()
@@ -41,9 +49,9 @@ public class MusicGrid : MonoBehaviour
         {
             Vector3Int mousePos = grid.WorldToCell(Camera.main.ScreenToWorldPoint(Input.mousePosition));
             RuleTile tile = tilemap.GetTile(mousePos) as RuleTile;
-            if (tile == null)
+            if (tile == null) return;
+            if (tile == exit)
             {
-                //ActivateGrid(false);
                 GridOff();
                 return;
             }
@@ -53,6 +61,7 @@ public class MusicGrid : MonoBehaviour
                 ToDraw = selected;
         }
 
+        if (ToDraw == null) return;
         if (Input.GetMouseButton(0))
         {
             Vector3Int mousePos = grid.WorldToCell(Camera.main.ScreenToWorldPoint(Input.mousePosition));
@@ -73,9 +82,9 @@ public class MusicGrid : MonoBehaviour
             notes[i] = new bool[8];
         }
 
-        for (int x = bounds.min.x; x < bounds.max.x; x++)
+        for (int x = 0; x < notes.Length-1; x++)
         {
-            for (int y = bounds.min.y; y < bounds.max.y; y++)
+            for (int y = 0; y < notes.Length -1; y++)
             {
                 RuleTile tile = tilemap.GetTile(new Vector3Int(x, y, 0)) as RuleTile;
                 notes[x][y] = (tile == selected);
@@ -87,9 +96,9 @@ public class MusicGrid : MonoBehaviour
     public void SetNotes(bool [][] pNotes)
     {
         BoundsInt bounds = tilemap.cellBounds;
-        for (int x = bounds.min.x; x < bounds.max.x; x++)
+        for (int x = 0; x < pNotes.Length-1; x++)
         {
-            for (int y = bounds.min.y; y < bounds.max.y; y++)
+            for (int y = 0; y < pNotes.Length -1; y++)
             {
                 RuleTile tile = pNotes[x][y] ? selected : empty;
                 tilemap.SetTile(new Vector3Int(x, y, 0), tile);
@@ -100,9 +109,9 @@ public class MusicGrid : MonoBehaviour
     private void SetClearGrid()
     {
         BoundsInt bounds = tilemap.cellBounds;
-        for (int x = bounds.min.x; x < bounds.max.x; x++)
+        for (int x = 0; x < 7; x++)
         {
-            for (int y = bounds.min.y; y < bounds.max.y; y++)
+            for (int y = 0; y < 7; y++)
             {
                 RuleTile tile = tilemap.GetTile(new Vector3Int(x, y, 0)) as RuleTile;
                 if (tile != null)
@@ -114,22 +123,22 @@ public class MusicGrid : MonoBehaviour
     public void GridOn(Monster pMonster)
     {
         _monster = pMonster;
+        ButtonManager.instance.SetButtonActive(false, true);
         if (pMonster.Notes == null) SetClearGrid();
         else SetNotes(pMonster.Notes);
-
-        
         ActivateGrid(true);
     }
 
     public void GridOff()
     {
+        ButtonManager.instance.SetButtonActive(true);
         ActivateGrid(false);
         if (_monster != null)
             _monster.Notes = GetNotes();
         SetClearGrid();
     }
 
-    public void ActivateGrid(bool active)
+    private void ActivateGrid(bool active)
     {
         grid.gameObject.SetActive(active);
         _interactable = active;
