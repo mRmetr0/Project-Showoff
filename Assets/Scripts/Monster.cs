@@ -9,6 +9,7 @@ using UnityEngine;
 [RequireComponent(typeof(AnimatorController))]
 public class Monster : MonoBehaviour
 {
+    [SerializeField] private Collider2D stand;
     [Space(5)][Header ("Instrument AudioClips:")]
     [SerializeField] private AudioClip drums;
     [SerializeField] private AudioClip bass;
@@ -42,6 +43,7 @@ public class Monster : MonoBehaviour
         _source = GetComponent<AudioSource>();
         _source.loop = true;
         SetKeySources();
+        stand.gameObject.SetActive(false);
     }
 
     private void Start()
@@ -70,9 +72,19 @@ public class Monster : MonoBehaviour
     private void Update()
     {   
         Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        if (Input.GetMouseButtonDown(0) && _collider == Physics2D.OverlapPoint(mousePos) && _clickable && !MusicGrid.instance.Interactable)
+        if (Input.GetMouseButtonDown(0) && _clickable && !MusicGrid.instance.Interactable)
         {
-            Reset();
+            Collider2D hit = Physics2D.OverlapPoint(mousePos);
+            if (hit == _collider)
+            {
+                Reset();
+                return;
+            }
+
+            if (hit == stand)
+            {
+                MusicGrid.instance.GridOn(this);
+            }
         }
     }
 
@@ -100,6 +112,7 @@ public class Monster : MonoBehaviour
         _source.clip = null;
         _canPlay = false;
         ButtonManager.instance.SetButtonActive(false);
+        stand.gameObject.SetActive(false);
     }
     
     public void SetInstrument(DragAndDrop.Type inst)
@@ -107,6 +120,8 @@ public class Monster : MonoBehaviour
         _instHold = inst;
         SetInstClip();
         SetAnimation();
+        if (_instHold is DragAndDrop.Type.GuitarGrid or DragAndDrop.Type.BassGrid or DragAndDrop.Type.DrumGrid or DragAndDrop.Type.KeytarGrid)
+            stand.gameObject.SetActive(true);
     }
 
     private void StartTrack()

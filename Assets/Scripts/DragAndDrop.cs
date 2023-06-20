@@ -59,8 +59,6 @@ public class DragAndDrop : MonoBehaviour
                 if (hit.gameObject.tag == "Reciever")
                 {
                     HandleReciever(hit.gameObject);
-                    if (type == Type.KeytarGrid || type == Type.GuitarGrid || type == Type.DrumGrid || type == Type.BassGrid)
-                        MusicGrid.instance.GridOn(hit.GetComponent<Monster>());
                 }
                 
             }
