@@ -75,16 +75,15 @@ public class MusicGrid : MonoBehaviour
 
     public bool[][] GetNotes()
     {
-        BoundsInt bounds = tilemap.cellBounds;
         bool[][] notes = new bool [8][];
         for (int i = notes.Length-1; i >=0; i--)
         {
             notes[i] = new bool[8];
         }
 
-        for (int x = 0; x < notes.Length-1; x++)
+        for (int x = 0; x < notes.Length; x++)
         {
-            for (int y = 0; y < notes.Length -1; y++)
+            for (int y = 0; y < notes.Length; y++)
             {
                 RuleTile tile = tilemap.GetTile(new Vector3Int(x, y, 0)) as RuleTile;
                 notes[x][y] = (tile == selected);
@@ -96,9 +95,9 @@ public class MusicGrid : MonoBehaviour
     public void SetNotes(bool [][] pNotes)
     {
         BoundsInt bounds = tilemap.cellBounds;
-        for (int x = 0; x < pNotes.Length-1; x++)
+        for (int x = 0; x < pNotes.Length; x++)
         {
-            for (int y = 0; y < pNotes.Length -1; y++)
+            for (int y = 0; y < pNotes.Length; y++)
             {
                 RuleTile tile = pNotes[x][y] ? selected : empty;
                 tilemap.SetTile(new Vector3Int(x, y, 0), tile);
@@ -109,9 +108,9 @@ public class MusicGrid : MonoBehaviour
     private void SetClearGrid()
     {
         BoundsInt bounds = tilemap.cellBounds;
-        for (int x = 0; x < 7; x++)
+        for (int x = 0; x < 8; x++)
         {
-            for (int y = 0; y < 7; y++)
+            for (int y = 0; y < 8; y++)
             {
                 RuleTile tile = tilemap.GetTile(new Vector3Int(x, y, 0)) as RuleTile;
                 if (tile != null)

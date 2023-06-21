@@ -1,10 +1,12 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(Collider2D))]
 public class DragAndDrop : MonoBehaviour
 {
-    public static Action<Vector2> onDragging; 
+    public static Action<Vector2> onDragging;
+    public static List<DragAndDrop> dragAndDrops;
     
     public Type type;
     public enum Type
@@ -26,6 +28,17 @@ public class DragAndDrop : MonoBehaviour
 
     void Start ()
     {
+        if (dragAndDrops == null)
+        {
+            dragAndDrops = new List<DragAndDrop>();
+            dragAndDrops.Add(this);
+        }
+        else
+        {
+            dragAndDrops.Add(this);
+        }
+
+
         _basePos = transform.localPosition;
         _collider = GetComponent<Collider2D>();
         Usable = true;

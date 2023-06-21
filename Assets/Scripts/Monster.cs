@@ -126,12 +126,18 @@ public class Monster : MonoBehaviour
 
     private void StartTrack()
     {
-        if (_source.clip != null) //TODO: make audio track sync with first beat;
-            _source.Play(); 
-        if (_instClip != null)
-            SetToPlay();
-
+        /**
+        if (_source.clip != null && _canPlay)
+        {
+            _canPlay = false;
+            _source.Play();
+            _clickable = false;
+        }
+        /**/
+        SetToPlay();
+        
         _clickable = false;
+        /**/
     }
 
     // ReSharper disable Unity.PerformanceAnalysis
@@ -176,25 +182,32 @@ public class Monster : MonoBehaviour
     // ReSharper disable Unity.PerformanceAnalysis
     private void PlayBeat()
     {
-        if (_instClip == null) return;
         if (!_canPlay) return;
-        _beat++;
-        if (_beat >= Notes.Length)
-            _beat = 0;
-        for (int i = 0; i < Notes.Length; i++)
+        if (_instClip != null)
         {
-            bool note = Notes[_beat][i];
-            if (note)
+            _beat++;
+            if (_beat >= Notes.Length)
+                _beat = 0;
+            for (int i = 0; i < Notes.Length; i++)
             {
-                if (i < _betterKeys.Min() || i > _betterKeys.Max())
+                bool note = Notes[_beat][i];
+                if (note)
                 {
-                    Debug.LogError($"NOTE NOT IN KEY LIST. NOTE: {i}");
-                }
-                else
-                {
-                    PlayKeySound(i);
+                    if (i < _betterKeys.Min() || i > _betterKeys.Max())
+                    {
+                        Debug.LogError($"NOTE NOT IN KEY LIST. NOTE: {i}");
+                    }
+                    else
+                    {
+                        PlayKeySound(i);
+                    }
                 }
             }
+        }
+        else
+        {
+            _source.Play();
+            _canPlay = false;
         }
     }
 
