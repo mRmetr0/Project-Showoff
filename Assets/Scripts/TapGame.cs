@@ -18,6 +18,11 @@ public class TapGame : MonoBehaviour
     [SerializeField] private AudioClip missedNoteClip;
     [SerializeField][Range(0, 10)] private int cheerThreshold;
     [SerializeField] [Range(0.0f, 10.0f)] private int feedback;
+
+    private float MinX, MinY, MaxX, MaxY;
+    private Vector2 pos;
+    public GameObject[] Fireworks;
+
     private List<TapInfo> _pendingColliders = new ();
     private AudioSource _source;
 
@@ -27,7 +32,17 @@ public class TapGame : MonoBehaviour
     private bool _canPlay = false;
     
     private double _nextTime;
-    
+
+    private void Start()
+    {
+        Vector2 Bounds = Camera.main.ScreenToWorldPoint(new Vector2(Screen.width, Screen.height));
+
+        MinX = -Bounds.x;
+        MaxX = Bounds.x;
+        MinY = -Bounds.y;
+        MaxY = Bounds.y;
+    }
+
     private void OnEnable() 
     {
         ButtonManager.onPlay += StartMusic;
@@ -98,6 +113,7 @@ public class TapGame : MonoBehaviour
             TapInfo info = ColliderInPending(clicked);
             if (info != null)
             {
+                SpawnFirework();
                 int score = info.GetScore();
                 if (score >= feedback) _source.PlayOneShot(feedbackClip);
                 _score += score;
@@ -146,6 +162,15 @@ public class TapGame : MonoBehaviour
             if (info.collider == collider) return info;
         }
         return null;
+    }
+
+    public void SpawnFirework()
+    {
+        Random r = new Random();
+        int NumberOfObj = r.Next(0, Fireworks.Length);
+        pos = new Vector2(r.Next((int)MinX, (int)MaxX), r.Next((int)MinY, (int)MaxY));
+        GameObject obj = Instantiate(Fireworks[NumberOfObj], pos, Quaternion.identity);
+        obj.transform.parent = transform;
     }
 }
 

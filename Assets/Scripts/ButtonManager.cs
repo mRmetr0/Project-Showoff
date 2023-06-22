@@ -9,8 +9,10 @@ public class ButtonManager : MonoBehaviour
    public static ButtonManager instance;
    [SerializeField] private Button playButton;
    [SerializeField] private Sprite startSprite, stopSprite;
+   [SerializeField] private GameObject playLight;
+   [SerializeField] private GameObject editLight;
 
-   private Image _image;
+    private Image _image;
    private bool _playing = false;
 
    public static Action onPlay;
@@ -33,11 +35,15 @@ public class ButtonManager : MonoBehaviour
       {
          onStop?.Invoke();
          _image.sprite = startSprite;
+         playLight.SetActive(false);
+         editLight.SetActive(true);
       }
       else
       {
          onPlay?.Invoke();
          _image.sprite = stopSprite;
+         playLight.SetActive(true);
+         editLight.SetActive(false);
       }
 
       _playing = !_playing;
