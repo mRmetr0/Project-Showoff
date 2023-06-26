@@ -134,26 +134,22 @@ public class MusicGrid : MonoBehaviour
     {
         switch (type)
         {
-            case(DragAndDrop.Type.GuitarGrid):
+            case(DragAndDrop.Type.Guitar):
                 selected = guitarSelected;
                 empty = guitarEmpty;
                 break;
-            case(DragAndDrop.Type.BassGrid):
+            case(DragAndDrop.Type.Bass):
                 selected = bassSelected;
                 empty = bassEmpty;
                 break;
-            case(DragAndDrop.Type.DrumGrid):
+            case(DragAndDrop.Type.Drums):
                 selected = drumsSelected;
                 empty = drumsEmpty;
                 break;
-            case(DragAndDrop.Type.KeytarGrid):
+            case(DragAndDrop.Type.Keytar):
                 selected = keytarSelected;
                 empty = keytarEmpty;
                 break;
-            case DragAndDrop.Type.Drums:
-            case DragAndDrop.Type.Bass:
-            case DragAndDrop.Type.Guitar:
-            case DragAndDrop.Type.Keytar:
             case DragAndDrop.Type.Null:
             default:
                 return;

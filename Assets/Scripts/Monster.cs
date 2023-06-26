@@ -20,17 +20,19 @@ public class Monster : MonoBehaviour
     private AudioSource[] _keySources;
     private DragAndDrop.Type _instHold = DragAndDrop.Type.Null;
     private Animator _animator;
+    private Camera _camera;
 
+    private readonly float _transpose = 0;
+    private float[] _betterKeys = { 0, 2, 4, 5, 7, 9, 11, 12}; //White key, includes second octave
+    
     private int _beat = -1;
     private bool _canPlay = false;
     private bool _clickable = true;
     private bool _grabbing;
-    
-    private readonly float _transpose = 0;
-    private float[] _betterKeys = { 0, 2, 4, 5, 7, 9, 11, 12}; //White key, includes second octave
+    private bool playGrid;
+
 
     public static List<Monster> monsters;
-    private Camera _camera;
     private static readonly int Grabbing = Animator.StringToHash("grabbing");
     private static readonly int Bass = Animator.StringToHash("bass");
     private static readonly int Guitar = Animator.StringToHash("guitar");
@@ -130,15 +132,9 @@ public class Monster : MonoBehaviour
         _instHold = inst;
         SetInstClip();
         SetAnimation();
-        if (_instHold is DragAndDrop.Type.GuitarGrid or DragAndDrop.Type.BassGrid or DragAndDrop.Type.DrumGrid or DragAndDrop.Type.KeytarGrid)
-            stand.gameObject.SetActive(true);
+        stand.gameObject.SetActive(true);
     }
 
-    private void StartTrack()
-    {
-        SetToPlay();
-        _clickable = false;
-    }
 
     // ReSharper disable Unity.PerformanceAnalysis
     private void SetInstClip()
@@ -149,27 +145,19 @@ public class Monster : MonoBehaviour
         {
             case(DragAndDrop.Type.Drums):
                 _source.clip = drums;
+                _instClip = drumGrid;
                 break;
             case(DragAndDrop.Type.Bass):
                 _source.clip = bass;
+                _instClip = bassGrid;
                 break;
             case(DragAndDrop.Type.Guitar):
                 _source.clip = guitar;
+                _instClip = guitarGrid;
                 break;
             case(DragAndDrop.Type.Keytar):
                 _source.clip = keytar;
-                break;
-            case (DragAndDrop.Type.KeytarGrid):
                 _instClip = keytarGrid;
-                break;
-            case (DragAndDrop.Type.DrumGrid):
-                _instClip = drumGrid;
-                break;
-            case (DragAndDrop.Type.GuitarGrid):
-                _instClip = guitarGrid;
-                break;
-            case (DragAndDrop.Type.BassGrid):
-                _instClip = bassGrid;
                 break;
             case (DragAndDrop.Type.Null):
                 break;
@@ -183,7 +171,7 @@ public class Monster : MonoBehaviour
     private void PlayBeat()
     {
         if (!_canPlay) return;
-        if (_instClip != null)
+        if (playGrid)
         {
             _beat++;
             if (_beat >= Notes.Length)
@@ -210,17 +198,25 @@ public class Monster : MonoBehaviour
             _canPlay = false;
         }
     }
-
-    private void SetToPlay()
+    
+    private void StartTrack()
     {
-        _canPlay = true;
-        _beat = -1;
+        SetToPlay();
+        _clickable = false;
     }
+
     private void StopTrack()
     {
         _source.Stop();
         _canPlay = false;
         _clickable = true;
+    }
+    
+    private void SetToPlay()
+    {
+        playGrid = !GridIsEmpty();
+        _canPlay = true;
+        _beat = -1;
     }
 
     private void SetAnimation()
@@ -228,20 +224,16 @@ public class Monster : MonoBehaviour
         _animator.SetBool(Grabbing, false);
         
         switch (_instHold){
-            case DragAndDrop.Type.BassGrid:
             case DragAndDrop.Type.Bass:
                 _animator.SetTrigger(Bass);
                 break;
-            case DragAndDrop.Type.GuitarGrid:
             case DragAndDrop.Type.Guitar:
                 _animator.SetTrigger(Guitar);
                 break;
-            case DragAndDrop.Type.DrumGrid:
             case DragAndDrop.Type.Drums:
                 _animator.SetTrigger(Drums);
                 break;
             case DragAndDrop.Type.Keytar:
-            case DragAndDrop.Type.KeytarGrid:
                 _animator.SetTrigger(Keytar);
                 break;
             case DragAndDrop.Type.Null:
@@ -264,5 +256,18 @@ public class Monster : MonoBehaviour
             _grabbing = false;
             _animator.SetBool(Grabbing, false);
         }
+    }
+
+    private bool GridIsEmpty()
+    {
+        for (int x = 0; x < Notes.Length; x++)
+        {
+            for (int y = 0; y < Notes.Length; y++)
+            {
+                if (Notes[x][y])
+                    return false;
+            }
+        }
+        return true;
     }
 }

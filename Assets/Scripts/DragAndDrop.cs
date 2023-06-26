@@ -15,10 +15,6 @@ public class DragAndDrop : MonoBehaviour
         Bass, 
         Guitar,
         Keytar,
-        KeytarGrid,
-        GuitarGrid,
-        BassGrid,
-        DrumGrid,
         Null
     }
     private Collider2D _collider;
