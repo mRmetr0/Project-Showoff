@@ -9,13 +9,23 @@ public class MusicGrid : MonoBehaviour
     public static Action<bool> onActivate;
     [SerializeField] private Grid grid;
     [SerializeField] private Tilemap tilemap;
-    [SerializeField] private RuleTile selected;
-    [SerializeField] private RuleTile empty;
     [SerializeField] private RuleTile exit;
+    
+    [Space(5)][Header("Instrument grid tiles")]
+    [SerializeField] private RuleTile guitarSelected;
+    [SerializeField] private RuleTile guitarEmpty;
+    [SerializeField] private RuleTile keytarSelected;
+    [SerializeField] private RuleTile keytarEmpty;
+    [SerializeField] private RuleTile drumsSelected;
+    [SerializeField] private RuleTile drumsEmpty;
+    [SerializeField] private RuleTile bassSelected;
+    [SerializeField] private RuleTile bassEmpty;
+    private RuleTile selected;
+    private RuleTile empty;
 
     private Monster _monster;
 
-    private RuleTile ToDraw;
+    private RuleTile _toDraw;
     private bool _interactable;
 
     public bool Interactable => _interactable;
@@ -29,6 +39,8 @@ public class MusicGrid : MonoBehaviour
         }
         instance = this;
         tilemap.CompressBounds();
+        selected = guitarSelected;
+        empty = guitarEmpty;
     }
 
     private void Start()
@@ -56,20 +68,20 @@ public class MusicGrid : MonoBehaviour
                 return;
             }
             if (tile == selected)
-                ToDraw = empty;
+                _toDraw = empty;
             else
-                ToDraw = selected;
+                _toDraw = selected;
         }
 
-        if (ToDraw == null) return;
+        if (_toDraw == null) return;
         if (Input.GetMouseButton(0))
         {
             Vector3Int mousePos = grid.WorldToCell(Camera.main.ScreenToWorldPoint(Input.mousePosition));
             RuleTile tile = tilemap.GetTile(mousePos) as RuleTile;
             if (tile == null) return;
-            tilemap.SetTile(mousePos, ToDraw);
-            // if (ToDraw != selected) return;
-            // _monster.PlayKeySound(mousePos.y);
+            if (_toDraw == selected && tile == empty)
+                _monster.PlayKeySound(mousePos.y);
+            tilemap.SetTile(mousePos, _toDraw);
         }
     }
 
@@ -107,7 +119,6 @@ public class MusicGrid : MonoBehaviour
 
     private void SetClearGrid()
     {
-        BoundsInt bounds = tilemap.cellBounds;
         for (int x = 0; x < 8; x++)
         {
             for (int y = 0; y < 8; y++)
@@ -119,10 +130,42 @@ public class MusicGrid : MonoBehaviour
         }
     }
 
+    private void SetTiles(DragAndDrop.Type type)
+    {
+        switch (type)
+        {
+            case(DragAndDrop.Type.GuitarGrid):
+                selected = guitarSelected;
+                empty = guitarEmpty;
+                break;
+            case(DragAndDrop.Type.BassGrid):
+                selected = bassSelected;
+                empty = bassEmpty;
+                break;
+            case(DragAndDrop.Type.DrumGrid):
+                selected = drumsSelected;
+                empty = drumsEmpty;
+                break;
+            case(DragAndDrop.Type.KeytarGrid):
+                selected = keytarSelected;
+                empty = keytarEmpty;
+                break;
+            case DragAndDrop.Type.Drums:
+            case DragAndDrop.Type.Bass:
+            case DragAndDrop.Type.Guitar:
+            case DragAndDrop.Type.Keytar:
+            case DragAndDrop.Type.Null:
+            default:
+                return;
+        }
+        SetClearGrid();
+    }
+
     public void GridOn(Monster pMonster)
     {
         _monster = pMonster;
         ButtonManager.instance.SetButtonActive(false, true);
+        SetTiles(_monster.InstHold);
         if (pMonster.Notes == null) SetClearGrid();
         else SetNotes(pMonster.Notes);
         ActivateGrid(true);

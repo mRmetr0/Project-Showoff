@@ -38,7 +38,7 @@ public class BackgroundManager : MonoBehaviour
         if (Input.GetMouseButtonDown(0)) _open = true;
         if (_curtanTime <= 1 && _open) 
         {
-            _curtanTime += curtanSpeed;
+            _curtanTime += curtanSpeed * Time.deltaTime;
             rightCurtain.transform.position = Vector3.Lerp(_startPosR, _endPosR, _curtanTime);
             leftCurtain.transform.position = Vector3.Lerp(_startPosL, _endPosL, _curtanTime);
             title.transform.position = Vector3.Lerp(_startPosT, _endPosT, _curtanTime);
@@ -88,7 +88,7 @@ class InstTutorial : ScriptableObject
 
     public void Move()
     {
-        _t += 0.01f;
+        _t += 0.01f * Time.deltaTime;
         _pointer.transform.position = Vector3.Lerp(_startPos, _endPos, _t);
         if (_t >= 1)
             toDestroy = true;
