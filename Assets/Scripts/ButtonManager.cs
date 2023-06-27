@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class ButtonManager : MonoBehaviour
@@ -62,5 +63,10 @@ public class ButtonManager : MonoBehaviour
 
       playButton.interactable = active;
       playButton.gameObject.SetActive(active);
+   }
+
+   public void ResetButton()
+   {
+      SceneManager.LoadScene(SceneManager.GetActiveScene().name);
    }
 }

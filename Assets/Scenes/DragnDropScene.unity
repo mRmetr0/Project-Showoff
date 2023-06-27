@@ -288,7 +288,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cff27ed9b6c3d6e44a04d2b8360d27d1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  clip: {fileID: 8300000, guid: b4300d358747ed84e87042760911b098, type: 3}
+  type: 0
 --- !u!61 &341326638
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -335,7 +335,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 9dfc825aed78fcd4ba02077103263b40, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -444,7 +444,8 @@ MonoBehaviour:
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_fontSharedMaterials: []
+  m_fontSharedMaterials:
+  - {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
   m_fontColor32:
@@ -561,6 +562,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bbea6edd9d12fe14b9f4b1a68f28c1c1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playButton: {fileID: 0}
+  startSprite: {fileID: 0}
+  stopSprite: {fileID: 0}
 --- !u!1 &498050996
 GameObject:
   m_ObjectHideFlags: 0
@@ -601,7 +605,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 9dfc825aed78fcd4ba02077103263b40, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -686,6 +690,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d465729930d94da48a607fa9d5e21bc4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  stand: {fileID: 0}
+  drums: {fileID: 0}
+  bass: {fileID: 0}
+  guitar: {fileID: 0}
+  keytar: {fileID: 0}
+  keytarGrid: {fileID: 0}
+  guitarGrid: {fileID: 0}
+  drumGrid: {fileID: 0}
+  bassGrid: {fileID: 0}
 --- !u!82 &498051001
 AudioSource:
   m_ObjectHideFlags: 0
@@ -932,7 +945,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 9dfc825aed78fcd4ba02077103263b40, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -991,6 +1004,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d465729930d94da48a607fa9d5e21bc4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  stand: {fileID: 0}
+  drums: {fileID: 0}
+  bass: {fileID: 0}
+  guitar: {fileID: 0}
+  keytar: {fileID: 0}
+  keytarGrid: {fileID: 0}
+  guitarGrid: {fileID: 0}
+  drumGrid: {fileID: 0}
+  bassGrid: {fileID: 0}
 --- !u!82 &635618172
 AudioSource:
   m_ObjectHideFlags: 0
@@ -1153,7 +1175,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 9dfc825aed78fcd4ba02077103263b40, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1212,6 +1234,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d465729930d94da48a607fa9d5e21bc4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  stand: {fileID: 0}
+  drums: {fileID: 0}
+  bass: {fileID: 0}
+  guitar: {fileID: 0}
+  keytar: {fileID: 0}
+  keytarGrid: {fileID: 0}
+  guitarGrid: {fileID: 0}
+  drumGrid: {fileID: 0}
+  bassGrid: {fileID: 0}
 --- !u!82 &1238993915
 AudioSource:
   m_ObjectHideFlags: 0
@@ -1354,7 +1385,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cff27ed9b6c3d6e44a04d2b8360d27d1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  clip: {fileID: 8300000, guid: bba048d57199f454ba054f930830659d, type: 3}
+  type: 0
 --- !u!61 &1325185283
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -1401,7 +1432,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 9dfc825aed78fcd4ba02077103263b40, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1464,7 +1495,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cff27ed9b6c3d6e44a04d2b8360d27d1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  clip: {fileID: 8300000, guid: 8f72ecdeb31f17740a98cfb976580b85, type: 3}
+  type: 0
 --- !u!61 &1329852593
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -1511,7 +1542,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 9dfc825aed78fcd4ba02077103263b40, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1655,6 +1686,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7dd13e5c7a9f60d4db23200192f6dbca, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _bpm: 0
 --- !u!4 &1472244888
 Transform:
   m_ObjectHideFlags: 0
@@ -1701,7 +1733,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cff27ed9b6c3d6e44a04d2b8360d27d1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  clip: {fileID: 8300000, guid: b4c5d264e4d128d44aec0da157a9719c, type: 3}
+  type: 0
 --- !u!61 &1688869069
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -1748,7 +1780,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 9dfc825aed78fcd4ba02077103263b40, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
