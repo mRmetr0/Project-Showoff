@@ -22,7 +22,10 @@ public class TapGame : MonoBehaviour
 
     private float MinX, MinY, MaxX, MaxY;
     private Vector2 pos;
+    private Vector2 pos2 = new Vector2(-7.4f, -1.88f);
+    private Vector2 pos3 = new Vector2(7.4f, -1.88f);
     public GameObject[] Fireworks;
+    public GameObject[] Confetti;
 
     private List<TapInfo> _pendingColliders = new ();
     private AudioSource _source;
@@ -172,8 +175,12 @@ public class TapGame : MonoBehaviour
         Random r = new Random();
         int NumberOfObj = r.Next(0, Fireworks.Length);
         pos = new Vector2(r.Next((int)MinX, (int)MaxX), r.Next((int)MinY, (int)MaxY));
-        GameObject obj = Instantiate(Fireworks[NumberOfObj], pos, Quaternion.identity);
+        GameObject obj = Instantiate(Fireworks[NumberOfObj], tiles[r.Next(tiles.Length)].transform.position, Quaternion.identity);
         obj.transform.parent = transform;
+        GameObject obj2 = Instantiate(Confetti[0], pos2, Quaternion.identity);
+        obj2.transform.parent = transform;
+        GameObject obj3 = Instantiate(Confetti[1], pos3, Quaternion.identity);
+        obj3.transform.parent = transform;
     }
 }
 
