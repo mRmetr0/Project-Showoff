@@ -168,6 +168,7 @@ public class TapGame : MonoBehaviour
 
     public void SpawnFirework()
     {
+        if (Fireworks.Length == 0) return;
         Random r = new Random();
         int NumberOfObj = r.Next(0, Fireworks.Length);
         pos = new Vector2(r.Next((int)MinX, (int)MaxX), r.Next((int)MinY, (int)MaxY));

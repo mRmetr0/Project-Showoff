@@ -256,7 +256,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cff27ed9b6c3d6e44a04d2b8360d27d1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  type: 5
+  type: 2
 --- !u!61 &117961611
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -776,7 +776,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cff27ed9b6c3d6e44a04d2b8360d27d1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  type: 7
+  type: 0
 --- !u!61 &330462500
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -1713,11 +1713,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cb63ce3b6bf45fe4c8d11a9bccc35015, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  tutorialPrefab: {fileID: 4124015210037157906, guid: 792bf13f06069c74e863897f482de2dd, type: 3}
   title: {fileID: 505564862}
   leftCurtain: {fileID: 1576619663}
   rightCurtain: {fileID: 2050985163}
-  curtanSpeed: 0.01
-  treeEyes: []
+  curtanSpeed: 0.5
+  popUpTimer: 20
 --- !u!4 &355224889
 Transform:
   m_ObjectHideFlags: 0
@@ -2450,9 +2451,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   grid: {fileID: 2040449020}
   tilemap: {fileID: 352897984}
-  selected: {fileID: 11400000, guid: 1062bf20d8999944a94be1c82c2fd4fe, type: 2}
-  empty: {fileID: 11400000, guid: 0b1510dbf55d83642a899fe6e2065f9c, type: 2}
   exit: {fileID: 11400000, guid: 0c7a3ce59c42da142a9532112756d071, type: 2}
+  guitarSelected: {fileID: 11400000, guid: 8a29a10784da2b343bd6d545b5dd5009, type: 2}
+  guitarEmpty: {fileID: 11400000, guid: a155631e537972c40997beb0549a5d70, type: 2}
+  keytarSelected: {fileID: 11400000, guid: 7786ce8bc4fcee54887e6e1745b50f27, type: 2}
+  keytarEmpty: {fileID: 11400000, guid: 2a77a98c6e278884490cbf5b9eb4ea10, type: 2}
+  drumsSelected: {fileID: 11400000, guid: e17e15c2e1027dc4fa3aa49a57ac4635, type: 2}
+  drumsEmpty: {fileID: 11400000, guid: 5b846ab06e03e8e4696b4311a0d54832, type: 2}
+  bassSelected: {fileID: 11400000, guid: 4273d20594a61bb418f91f198c4f1fac, type: 2}
+  bassEmpty: {fileID: 11400000, guid: 37c35c55d80ee3d4fbd06ea9b04f3df5, type: 2}
 --- !u!82 &617020327
 AudioSource:
   m_ObjectHideFlags: 0
@@ -3275,6 +3282,7 @@ MonoBehaviour:
   - {fileID: 218285817}
   feedbackClip: {fileID: 8300000, guid: 9e864db13c3e2654d8bc80c4f95ee18f, type: 3}
   missedNoteClip: {fileID: 8300000, guid: f294589e56f530849bf2255d3352c96e, type: 3}
+  winScore: 0
   cheerThreshold: 5
   feedback: 5
   Fireworks:
@@ -8794,7 +8802,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cff27ed9b6c3d6e44a04d2b8360d27d1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  type: 4
+  type: 3
 --- !u!61 &1494216757
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -11234,7 +11242,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cff27ed9b6c3d6e44a04d2b8360d27d1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  type: 6
+  type: 1
 --- !u!212 &2079490318
 SpriteRenderer:
   m_ObjectHideFlags: 0
