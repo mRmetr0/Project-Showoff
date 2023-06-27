@@ -16,8 +16,10 @@ public class TapGame : MonoBehaviour
     [SerializeField] private Collider2D[] tiles;
     [SerializeField] private AudioClip feedbackClip;
     [SerializeField] private AudioClip missedNoteClip;
+    [SerializeField] private int winScore;
     [SerializeField][Range(0, 10)] private int cheerThreshold;
     [SerializeField] [Range(0.0f, 10.0f)] private int feedback;
+    
     private List<TapInfo> _pendingColliders = new ();
     private AudioSource _source;
 
@@ -55,7 +57,7 @@ public class TapGame : MonoBehaviour
         for (int i = _pendingColliders.Count - 1; i >= 0; i--)
         {
             TapInfo info = _pendingColliders[i];
-            info.LerpPos(0.01f);
+            info.LerpPos(0.005f);
             if (info.toDelete)
             {
                 _pendingColliders.Remove(info);
@@ -104,6 +106,7 @@ public class TapGame : MonoBehaviour
                 Debug.Log($"Score: {_score}");
                 _pendingColliders.Remove(info);
                 Destroy(info);
+                if (_score >= winScore) ButtonManager.instance.StartStop();
                 return;
             }
         }
@@ -172,7 +175,7 @@ class TapInfo : ScriptableObject
         _renderer = outline.GetComponent<SpriteRenderer>();
     }
 
-    public void LerpPos(float speed = 0.05f)
+    public void LerpPos(float speed = 0.5f)
     {
         //Lerp of note position:
         if (_moveUp)
