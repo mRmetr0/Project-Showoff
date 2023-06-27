@@ -2007,7 +2007,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!212 &505564863
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -3282,7 +3282,7 @@ MonoBehaviour:
   - {fileID: 218285817}
   feedbackClip: {fileID: 8300000, guid: 9e864db13c3e2654d8bc80c4f95ee18f, type: 3}
   missedNoteClip: {fileID: 8300000, guid: f294589e56f530849bf2255d3352c96e, type: 3}
-  winScore: 0
+  winScore: 100
   cheerThreshold: 5
   feedback: 5
   Fireworks:
@@ -3290,6 +3290,9 @@ MonoBehaviour:
   - {fileID: 5244746376786941699, guid: a3d39c2cab625d24a9d977c6436b92b5, type: 3}
   - {fileID: 5244746376786941699, guid: de47716e34257994c807d631e580605a, type: 3}
   - {fileID: 5244746376786941699, guid: cbd0771d64fd05b45a095cad94830e1b, type: 3}
+  Confetti:
+  - {fileID: 508856313707552751, guid: 3d7ced226b8e7d741906d95d2a44f97a, type: 3}
+  - {fileID: 3954282629810434016, guid: 808ecf1971dab31498dc305f0bcf26d4, type: 3}
 --- !u!82 &860157813
 AudioSource:
   m_ObjectHideFlags: 0
@@ -9537,7 +9540,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!212 &1576619665
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -10991,7 +10994,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!212 &2050985165
 SpriteRenderer:
   m_ObjectHideFlags: 0

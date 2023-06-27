@@ -20,8 +20,6 @@ public class TapGame : MonoBehaviour
     [SerializeField][Range(0, 10)] private int cheerThreshold;
     [SerializeField] [Range(0.0f, 10.0f)] private int feedback;
 
-    private float MinX, MinY, MaxX, MaxY;
-    private Vector2 pos;
     private Vector2 pos2 = new Vector2(-7.4f, -1.88f);
     private Vector2 pos3 = new Vector2(7.4f, -1.88f);
     public GameObject[] Fireworks;
@@ -40,11 +38,6 @@ public class TapGame : MonoBehaviour
     private void Start()
     {
         Vector2 Bounds = Camera.main.ScreenToWorldPoint(new Vector2(Screen.width, Screen.height));
-
-        MinX = -Bounds.x;
-        MaxX = Bounds.x;
-        MinY = -Bounds.y;
-        MaxY = Bounds.y;
     }
 
     private void OnEnable() 
@@ -174,7 +167,6 @@ public class TapGame : MonoBehaviour
         if (Fireworks.Length == 0) return;
         Random r = new Random();
         int NumberOfObj = r.Next(0, Fireworks.Length);
-        pos = new Vector2(r.Next((int)MinX, (int)MaxX), r.Next((int)MinY, (int)MaxY));
         GameObject obj = Instantiate(Fireworks[NumberOfObj], tiles[r.Next(tiles.Length)].transform.position, Quaternion.identity);
         obj.transform.parent = transform;
         GameObject obj2 = Instantiate(Confetti[0], pos2, Quaternion.identity);
