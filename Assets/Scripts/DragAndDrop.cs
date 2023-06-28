@@ -24,7 +24,7 @@ public class DragAndDrop : MonoBehaviour
 
     void Start ()
     {
-        if (dragAndDrops == null)
+        if (dragAndDrops == null || dragAndDrops.Count >= 4)
         {
             dragAndDrops = new List<DragAndDrop>();
             dragAndDrops.Add(this);
