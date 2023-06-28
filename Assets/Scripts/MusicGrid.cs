@@ -81,7 +81,8 @@ public class MusicGrid : MonoBehaviour
             if (tile == null) return;
             if (_toDraw == selected && tile == empty)
                 _monster.PlayKeySound(mousePos.y);
-            tilemap.SetTile(mousePos, _toDraw);
+            if (tile != exit)
+                tilemap.SetTile(mousePos, _toDraw);
         }
     }
 

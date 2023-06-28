@@ -19,6 +19,7 @@ public class TapGame : MonoBehaviour
     [SerializeField] private int winScore;
     [SerializeField][Range(0, 10)] private int cheerThreshold;
     [SerializeField] [Range(0.0f, 10.0f)] private int feedback;
+    [SerializeField] private float noteSpeed = 0.0005f;
 
     private Vector2 pos2 = new Vector2(-7.4f, -1.88f);
     private Vector2 pos3 = new Vector2(7.4f, -1.88f);
@@ -67,7 +68,7 @@ public class TapGame : MonoBehaviour
         for (int i = _pendingColliders.Count - 1; i >= 0; i--)
         {
             TapInfo info = _pendingColliders[i];
-            info.LerpPos(0.005f);
+            info.LerpPos(noteSpeed);
             if (info.toDelete)
             {
                 _pendingColliders.Remove(info);
@@ -114,7 +115,7 @@ public class TapGame : MonoBehaviour
                 int score = info.GetScore();
                 if (score >= feedback) _source.PlayOneShot(feedbackClip);
                 _score += score;
-                Debug.Log($"Score: {_score}");
+                //Debug.Log($"Score: {_score}");
                 _pendingColliders.Remove(info);
                 Destroy(info);
                 if (_score >= winScore) ButtonManager.instance.StartStop();
@@ -140,7 +141,7 @@ public class TapGame : MonoBehaviour
         }
         _pendingColliders.Clear();
 
-        Debug.Log($"{_score} / {_tileAmount} = {_score / _tileAmount} > {cheerThreshold}; {_score / _tileAmount > cheerThreshold}");
+        //Debug.Log($"{_score} / {_tileAmount} = {_score / _tileAmount} > {cheerThreshold}; {_score / _tileAmount > cheerThreshold}");
         if (_score / _tileAmount > cheerThreshold)
             Debug.Log("GOOD SCORE");
     }
@@ -215,13 +216,12 @@ class TapInfo : ScriptableObject
         }
         else
         {
-            _t -= speed*3;
+            _t -= speed * Time.deltaTime;
             if (_t <= 0)
             {
                 toDelete = true;
             }
         }
-        
     }
 
     public int GetScore()

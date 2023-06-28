@@ -60,7 +60,7 @@ public class Monster : MonoBehaviour
     private void Start()
     {
         _camera = Camera.main;
-        if (monsters == null)
+        if (monsters == null || monsters.Count >= 4)
             monsters = new List<Monster>();
         monsters.Add(this);
     }

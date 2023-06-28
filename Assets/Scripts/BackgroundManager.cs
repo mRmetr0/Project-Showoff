@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using Random = System.Random;
@@ -49,6 +50,12 @@ public class BackgroundManager : MonoBehaviour
         ButtonManager.onStop -= TurnOn;
     }
 
+    private void OnDestroy()
+    {
+        if (_pointer != null) 
+            Destroy(_pointer);
+    }
+
     private void Update()
     {
         
@@ -73,10 +80,11 @@ public class BackgroundManager : MonoBehaviour
 
     private void AddTutorial()
     {
-            InstTutorial tutorial = ScriptableObject.CreateInstance<InstTutorial>();
-            tutorial.Instantiate(tutorialPrefab , DragAndDrop.dragAndDrops.ToArray(), Monster.monsters.ToArray());
-            _pointer = tutorial;
-            Debug.Log($"pointer {_pointer}, bool: {_pointer == null}, {_pointerNotNull}");
+        if (DragAndDrop.dragAndDrops.Count == 0 || Monster.monsters.Count == 0) return;
+        InstTutorial tutorial = ScriptableObject.CreateInstance<InstTutorial>();
+        tutorial.Instantiate(tutorialPrefab , DragAndDrop.dragAndDrops.ToArray(), Monster.monsters.ToArray());
+        _pointer = tutorial;
+        Debug.Log($"pointer {_pointer}, bool: {_pointer == null}, {_pointerNotNull}");
     }
 
     private void HandleTutorials()
@@ -115,17 +123,17 @@ class InstTutorial : ScriptableObject
     private Vector3 _startPos, _endPos;
     private Random _rand;
     private float _t;
-    public void Instantiate (GameObject pPrefab, DragAndDrop[] pStarts, Monster[] pEnds)
+    public void Instantiate(GameObject pPrefab, DragAndDrop[] pStarts, Monster[] pEnds)
     {
         _rand = new();
         List<Vector3> startPos = new();
         List<Vector3> endPos = new();
-        for (int i = 0; i < pStarts.Length; i++)
+        for (int i = 0; i < 4; i++)
         {
             Vector3 pos = new (pStarts[i].transform.position.x, pStarts[i].transform.position.y, -.5f);
             startPos.Add( pos);
         }
-        for (int i = 0; i < pEnds.Length; i++)
+        for (int i = 0; i < 4; i++)
         {
             Vector3 pos = new (pEnds[i].transform.position.x, pEnds[i].transform.position.y, -.5f);
             endPos.Add(pos);

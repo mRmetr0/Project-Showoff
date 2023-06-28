@@ -67,6 +67,6 @@ public class ButtonManager : MonoBehaviour
 
    public void ResetButton()
    {
-      SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+      SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
    }
 }
