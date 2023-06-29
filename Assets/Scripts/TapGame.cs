@@ -73,7 +73,7 @@ public class TapGame : MonoBehaviour
             {
                 _pendingColliders.Remove(info);
                 Destroy(info);
-                _source.PlayOneShot(missedNoteClip);
+                //_source.PlayOneShot(missedNoteClip);
             }
         }
     }
@@ -205,7 +205,7 @@ class TapInfo : ScriptableObject
         //Lerp of note position:
         if (_moveUp)
         {
-            _t += speed;
+            _t += speed * Time.deltaTime;
             var position = collider.gameObject.transform.position;
             note.transform.position = Vector3.Lerp(startPos, new Vector3(position.x, position.y, -2), _t);
             if (_t > 1) _moveUp = false;
@@ -216,7 +216,7 @@ class TapInfo : ScriptableObject
         }
         else
         {
-            _t -= speed * Time.deltaTime;
+            _t -= speed * Time.deltaTime * 3;
             if (_t <= 0)
             {
                 toDelete = true;
